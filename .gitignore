@@ -1,3 +1,77 @@
 .tool-versions
 .idea
 .env
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Conda
+.conda/
+*.conda
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+
+# Flask
+instance/
+.webassets-cache
+
+# Alembic
+db/alembic/__pycache__/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# PyCharm specific
+.idea/**
+!.idea/runConfigurations/
+!.idea/inspectionProfiles/
+
+# VS Code
+.vscode/**
+!.vscode/settings.json.example
+!.vscode/tasks.json.example
+
+# OS metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+*.log.*
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+
+# Project specific
+# (Add any project-specific ignores here)
+.env.local
+.env.*.local
+
+# Database backups
+*.backup
+*.dump
+
+# Runtime
+.pid
+*.pid
+*.seed
