@@ -3,6 +3,8 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from db.base import db
 from app.models.user import User
+from app.models.session import Session
+from app.models.sub_session import Subsession
 from alembic import context
 
 # this is the Alembic Config object, which provides
