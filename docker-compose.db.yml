@@ -1,0 +1,17 @@
+
+services:
+  database_local:
+    image: postgres:18
+    container_name: sessionbloom_local
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=sessionbloom_local
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_local_data:/var/lib/postgresql
+    restart: unless-stopped
+
+volumes:
+  postgres_local_data:

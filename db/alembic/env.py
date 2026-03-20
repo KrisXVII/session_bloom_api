@@ -6,10 +6,17 @@ from app.models.user import User
 from app.models.session import Session
 from app.models.sub_session import Subsession
 from alembic import context
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+database_url = os.getenv('DATABASE_URL')
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+config.set_main_option('sqlalchemy.url', database_url)
 target_metadata = db.metadata
 
 # Interpret the config file for Python logging.
