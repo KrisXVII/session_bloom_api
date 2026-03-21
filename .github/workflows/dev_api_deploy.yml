@@ -1,0 +1,51 @@
+name: dev_api_deploy.yml
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+
+#  test:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.13.9'
+#
+#      - name: Install dependencies
+#        run: |
+#          pip install -r requirements.txt
+#          pip install pytest pytest-cov
+#
+#      - name: Run tests
+#        run: pytest --cov=app tests/
+
+  build:
+    runs-on: self-hosted
+#    needs: test
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run migrations from HOST
+        run: |
+          echo ${{secrets.PROJECT_PATH}}
+          echo ${{secrets.DATABASE_DEV_URL}}
+          cd ${{secrets.PROJECT_PATH}}
+          export DATABASE_URL=${{secrets.DATABASE_DEV_URL}}
+          alembic upgrade head
+
+      - name: Rebuild and restart containers
+        run: |
+          cd cd ${{secrets.PROJECT_PATH}}
+          docker-compose -f dev_db.docker-compose.yml down
+          docker-compose -f dev_db.docker-compose.yml up -d --build
+          docker image prune -f
