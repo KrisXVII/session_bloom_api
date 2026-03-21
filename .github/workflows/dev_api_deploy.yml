@@ -37,13 +37,13 @@ jobs:
 
       - name: Run migrations from HOST (not container)
         run: |
-          cd /PATH/TO/YOUR/PROJECT
+          cd ${{secrets.PROJECT_PATH}}
           export DATABASE_URL=postgresql://dev_user:jg111kas63ff@database_dev:5432/sessionbloom_dev
           alembic upgrade head
 
       - name: Rebuild and restart containers
         run: |
-          cd /PATH/TO/YOUR/PROJECT
+          cd cd ${{secrets.PROJECT_PATH}}
           docker-compose -f dev_db.docker-compose.yml down
           docker-compose -f dev_db.docker-compose.yml up -d --build
           docker image prune -f
