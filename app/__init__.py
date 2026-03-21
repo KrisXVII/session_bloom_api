@@ -15,7 +15,7 @@ def create_app():
 	# app.register_blueprint(session_bp, url_prefix='/sessions')
 
 	@app.route('/')
-	def hello_world():  # put application's code here
+	def hello_world():
 		return 'Hello World!'
 
 	return app
