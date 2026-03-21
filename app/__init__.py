@@ -13,6 +13,7 @@ def create_app():
 
 	# app.register_blueprint(user_bp, url_prefix='/users')
 	# app.register_blueprint(session_bp, url_prefix='/sessions')
+	# ci comment for test
 
 	@app.route('/')
 	def hello_world():
