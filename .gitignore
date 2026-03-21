@@ -1,6 +1,8 @@
 .tool-versions
 .idea
 .env
+/actions-runner
+.github/workflows/dev_api_deploy.yml
 # Python
 __pycache__/
 *.py[cod]
@@ -74,4 +76,5 @@ coverage.xml
 # Runtime
 .pid
 *.pid
+
 *.docker-compose.yml
