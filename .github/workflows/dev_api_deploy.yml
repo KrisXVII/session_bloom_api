@@ -40,7 +40,7 @@ jobs:
       - name: Raise dev database before running migrations
         run: |
           cd ${{secrets.PROJECT_PATH}}
-          docker-compose -f dev_db.docker-compose.yml up -d database_dev
+          docker-compose -f dev_db.docker-compose.yml up -d
 
 
       - name: Run migrations from HOST
