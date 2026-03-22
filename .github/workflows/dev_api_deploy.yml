@@ -39,9 +39,9 @@ jobs:
 
       - name: Raise dev database before running migrations
         run: |
+          pip install psycopg2-binary
           cd ${{secrets.PROJECT_PATH}}
-          docker-compose -f dev_db.docker-compose.yml up -d
-
+          docker-compose -f dev_db.docker-compose.yml up -d database_dev
 
       - name: Run migrations from HOST
         run: |
