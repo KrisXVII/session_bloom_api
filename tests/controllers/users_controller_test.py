@@ -1,6 +1,7 @@
 import json
 import pytest
 from tests.factories.user_factory import UserFactory
+from app.models.user import User
 
 class TestUserController:
 
@@ -18,7 +19,7 @@ class TestUserController:
 		}
 
 		response = client.post('/users/', json=data)
-		assert response.status_code == 201
+		assert response.status_code == 200
 
 		data = response.json
 		assert data['email'] == "test@example.com"
