@@ -11,6 +11,6 @@ class User(db.Model):
 	first_name = db.Column(db.String(50), nullable=False)
 	last_name = db.Column(db.String(50), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
-	sessions = db.relationship("User", back_populates="user", lazy=True)
+	sessions = db.relationship("Session", back_populates="user", lazy=True)
 	created_at = db.Column(db.DateTime, default=datetime.utcnow)
 	updated_at = db.Column(db.DateTime, default=datetime.utcnow)
