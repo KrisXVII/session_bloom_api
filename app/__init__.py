@@ -13,6 +13,9 @@ def create_app():
 	else:
 		app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 
+	print(env)
+	print(app.config['SQLALCHEMY_DATABASE_URI'])
+
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 	db.init_app(app)
