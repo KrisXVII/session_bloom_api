@@ -38,7 +38,9 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Raise dev database before running migrations
-        run: docker-compose -f dev_db.docker-compose.yml up -d database_dev
+        run: |
+          cd ${{secrets.PROJECT_PATH}}
+          docker-compose -f dev_db.docker-compose.yml up -d database_dev
 
 
       - name: Run migrations from HOST
