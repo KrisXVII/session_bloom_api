@@ -6,29 +6,29 @@ on:
 
 jobs:
 
-#  test:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v6
-#
-#      - name: Set up Python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.13.9'
-#
-#      - name: Install dependencies
-#        run: |
-#          pip install -r requirements.txt
-#          pip install pytest pytest-cov
-#
-#      - name: Run tests
-#        run: pytest --cov=app tests/
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        run: pytest
 
   build:
     runs-on: self-hosted
-#    needs: test
+    needs: test
     if: github.ref == 'refs/heads/dev'
 
     steps:
