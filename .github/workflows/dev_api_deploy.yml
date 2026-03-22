@@ -37,10 +37,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Raise dev database before running migrations
+        run: docker-compose -f dev_db.docker-compose.yml up -d database_dev
+
+
       - name: Run migrations from HOST
         run: |
-          echo ${{secrets.PROJECT_PATH}}
-          echo ${{secrets.DATABASE_DEV_URL}}
           cd ${{secrets.PROJECT_PATH}}
           export DATABASE_URL=${{secrets.DATABASE_DEV_URL}}
           alembic upgrade head
