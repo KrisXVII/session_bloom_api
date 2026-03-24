@@ -8,7 +8,7 @@ def create_app(config_name=None):
 	if config_name is None:
 		config_name = os.getenv("FLASK_ENV", "development")
 
-	from app.config_env import config
+	from config.config_env import config
 	app.config.from_object(config.get(config_name, config['default']))
 
 	db.init_app(app)
