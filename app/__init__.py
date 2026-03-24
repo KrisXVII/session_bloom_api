@@ -26,6 +26,6 @@ def create_app(config_name=None):
 
 	@app.route('/test')
 	def test_pipeline():
-		return 'Tested API!'
+		return 'Tested API pipeline!'
 
 	return app
