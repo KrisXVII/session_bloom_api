@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+#      - name: Pull latest changes
+#        run: git pull origin dev
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -36,10 +39,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-        with:
-          ref: dev
-          fetch-depth: 0  # Get all history
-          clean: true
+
+#      - name: Pull latest changes
+#        run: git pull origin dev
 
 #      - name: Raise dev database before running migrations # To use in prod pipeline
 #        run: |
@@ -55,7 +57,7 @@ jobs:
 
       - name: Rebuild and restart containers
         run: |
-          cd ${{secrets.PROJECT_PATH}}
+          cd ${{ github.workspace }}
           docker-compose -f dev_db.docker-compose.yml down
           docker-compose -f dev_db.docker-compose.yml up -d --build
           docker image prune -f
