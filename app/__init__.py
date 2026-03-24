@@ -24,4 +24,8 @@ def create_app(config_name=None):
 	def hello_world():
 		return 'Hello World!'
 
+	@app.route('/test')
+	def test_pipeline():
+		return 'Tested!'
+
 	return app
