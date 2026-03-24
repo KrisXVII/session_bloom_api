@@ -1,19 +1,15 @@
 import os
 from flask import Flask
 from db.base import db
-from dotenv import load_dotenv
 
-def create_app():
+def create_app(config_name=None):
 	app = Flask(__name__)
-	load_dotenv()
-	env = os.getenv("FLASK_ENV")
 
-	if env == "test":
-		app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-	else:
-		app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+	if config_name is None:
+		config_name = os.getenv("FLASK_ENV", "development")
 
-	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+	from app.config_env import config
+	app.config.from_object(config.get(config_name, config['default']))
 
 	db.init_app(app)
 
