@@ -55,6 +55,16 @@ jobs:
 #          export DATABASE_URL=${{secrets.DATABASE_DEV_URL}}
 #          alembic upgrade head
 
+      - name: Create .env from secrets
+        run: |
+          cat > .env << EOF
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          FLASK_ENV=${{ secrets.FLASK_ENV }}
+          EOF
+
       - name: Rebuild and restart containers
         run: |
           cd ${{ github.workspace }}
