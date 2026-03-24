@@ -36,6 +36,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          ref: dev
+          fetch-depth: 0  # Get all history
+          clean: true
 
 #      - name: Raise dev database before running migrations # To use in prod pipeline
 #        run: |
