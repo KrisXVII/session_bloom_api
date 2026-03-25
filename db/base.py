@@ -8,7 +8,7 @@ load_dotenv()
 class Base(DeclarativeBase):
 	pass
 
-os.getenv("DATABASE")
+os.getenv("DATABASE_URL")
 
 db = SQLAlchemy(model_class=Base)
 

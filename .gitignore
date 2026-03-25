@@ -75,3 +75,5 @@ coverage.xml
 # Runtime
 .pid
 *.pid
+
+local_db.docker-compose.yml

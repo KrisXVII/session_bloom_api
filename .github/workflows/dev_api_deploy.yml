@@ -37,8 +37,7 @@ jobs:
     if: github.ref == 'refs/heads/dev'
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+
 
 #      - name: Pull latest changes
 #        run: git pull origin dev
@@ -55,8 +54,12 @@ jobs:
 #          export DATABASE_URL=${{secrets.DATABASE_DEV_URL}}
 #          alembic upgrade head
 
+      - name: Checkout code
+        uses: actions/checkout@v6
+
       - name: Create .env from secrets
         run: |
+          cd ${{ github.workspace }}
           cat > .env << EOF
           POSTGRES_USER=${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
@@ -64,6 +67,12 @@ jobs:
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           FLASK_ENV=${{ secrets.FLASK_ENV }}
           EOF
+
+      - name: Run migrations
+        run: |
+          cd ${{ github.workspace }}
+          export DATABASE_URL=${{ secrets.DATABASE_URL }}
+          alembic upgrade head
 
       - name: Rebuild and restart containers
         run: |
