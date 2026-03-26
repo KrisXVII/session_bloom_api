@@ -1,5 +1,6 @@
 import json
-import pytest
+import pytest as p
+from tests.conftest import focus
 from tests.factories.user_factory import UserFactory
 from app.models.user import User
 
