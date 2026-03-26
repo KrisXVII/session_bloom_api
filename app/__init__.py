@@ -9,7 +9,6 @@ console = Console()
 def ap(obj):
 	console.print("\n")
 	console.print(Pretty(obj, expand_all=True))
-	console.print("\n")
 
 def create_app(config_name=None):
 	app = Flask(__name__)
