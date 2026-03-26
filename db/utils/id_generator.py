@@ -1,10 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
-TODAY = datetime.utcnow().date()
+TODAY = datetime.now(timezone.utc)
 
 class IDGenerator:
 	_counter = 0
-	_last_date = datetime.utcnow().date()
+	_last_date = datetime.now(timezone.utc)
 
 	@classmethod
 	def generate_user_uid(cls):
