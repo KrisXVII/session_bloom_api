@@ -1,6 +1,15 @@
 import os
 from flask import Flask
 from db.base import db
+from rich.console import Console
+from rich.pretty import Pretty
+
+console = Console()
+
+def ap(obj):
+	console.print("\n")
+	console.print(Pretty(obj, expand_all=True))
+	console.print("\n")
 
 def create_app(config_name=None):
 	app = Flask(__name__)

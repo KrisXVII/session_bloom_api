@@ -9,7 +9,7 @@ class BaseModel(db.Model):
 
 	@classmethod
 	def all(cls):
-		return cls.query.all()
+		return [u.to_dict() for u in cls.query.all()]
 
 	def save(self):
 		"""Save instance to database"""
@@ -23,5 +23,10 @@ class BaseModel(db.Model):
 		db.session.commit()
 
 	def to_dict(self):
-		"""Convert model to dictionary"""
-		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+		result = {}
+		for column in self.__table__.columns:
+			value = getattr(self, column.name)
+			if isinstance(value, datetime):
+				value = value.isoformat()
+			result[column.name] = value
+		return result

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models.user import User
 from app.services.user_service import UserService
+from app import ap
 # from app.schemas.user_schema import UserSchema
 
 user_bp = Blueprint("user", __name__)
@@ -20,3 +21,10 @@ def create_user():
 
 	user = UserService.create_user(data)
 	return jsonify(user.to_dict()), 200
+
+@user_bp.route("/get_user/<user_id>", methods=["GET"])
+def get_user(user_id):
+	user = User.query.get(user_id)
+	ap(user.to_dict())
+	return jsonify(user.to_dict()), 200
+	# TODO serializer

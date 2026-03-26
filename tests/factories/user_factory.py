@@ -1,21 +1,24 @@
 import factory
 from faker import Faker
 from app.models.user import User
-from datetime import datetime
-import uuid
+from datetime import datetime, timezone
+from db.utils.id_generator import IDGenerator
+from db.base import db
 
 fake = Faker()
 
-class UserFactory(factory.Factory):
+class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
 	class Meta:
 		model = User
+		sqlalchemy_session = db.session
+		sqlalchemy_session_persistence = "commit"
 
-	id = factory.LazyAttribute(lambda _: str(uuid.uuid4()))
+	id = factory.LazyAttribute(lambda _: IDGenerator.generate_user_uid())
 	first_name = factory.LazyAttribute(lambda _: fake.first_name())
 	last_name = factory.LazyAttribute(lambda _: fake.last_name())
 	email = factory.LazyAttribute(lambda _: fake.email())
-	created_at = factory.LazyAttribute(lambda _: datetime.utcnow())
-	updated_at = factory.LazyAttribute(lambda _: datetime.utcnow())
+	created_at = factory.LazyAttribute(lambda _: datetime.now(timezone.utc))
+	updated_at = factory.LazyAttribute(lambda _: datetime.now(timezone.utc))
 
 	@classmethod
 	def create_batch(cls, size, **kwargs):

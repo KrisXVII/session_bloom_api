@@ -1,8 +1,8 @@
 import json
 import pytest as p
 from tests.conftest import focus
-from tests.factories.user_factory import UserFactory
 from app.models.user import User
+from ..factories.user_factory import UserFactory
 
 class TestUserController:
 
@@ -25,3 +25,11 @@ class TestUserController:
 		data = response.json
 		assert data['email'] == "test@example.com"
 		assert data['first_name'] == "John"
+
+	def test_get_user(self, client, db):
+		# TODO enter params schema
+		user = UserFactory.create()
+		response = client.get(f"users/get_user/{user.id}")
+		assert response.status_code == 200
+		assert response.json["id"] == user.id
+		# TODO response schema
