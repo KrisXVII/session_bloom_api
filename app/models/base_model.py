@@ -11,11 +11,13 @@ class BaseModel(db.Model):
 	@classmethod
 	def all(cls):
 		try:
-			records = [obj.to_dict() for obj in cls.query.all()]
+			records = cls.query.all()
 			return records
 		except Exception as e:
-			ap(e.args)
-			raise CustomError("Not found", 400, "Error occurred retrieving records from Database")
+			return CustomError(
+				message=type(e).__name__,
+				code=400,
+				details=str(e))
 
 	@classmethod
 	def get(cls, obj_id):
