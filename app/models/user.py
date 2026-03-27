@@ -1,6 +1,6 @@
 from db.base import db
 from db.utils.id_generator import IDGenerator
-from app.models.base import BaseModel
+from app.models.base_model import BaseModel
 
 class User(BaseModel):
 	__tablename__ = 'users'
