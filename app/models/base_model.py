@@ -22,27 +22,28 @@ class BaseModel(db.Model):
 		record = cls.query.get(obj_id)
 		if record is None:
 			return CustomError(
-				"Not found",
-				400,
-				f"{cls.__name__} record with ID {obj_id} doesn't exist")
+				message="Not found",
+				code=400,
+				details=f"{cls.__name__} record with ID {obj_id} doesn't exist")
 		return record
 
 	def save(self):
-		"""Save instance to database"""
 		db.session.add(self)
 		db.session.commit()
 		return self
 
 	@classmethod
-	def create(cls, params):
-		# needed checks, see what is automatically done with ID on postgres
+	def create(cls, **kwargs):
 		try:
-			new_instance = cls(params)
+			new_instance = cls(**kwargs)
 			new_instance.save()
-			return new_instance.to_dict(), 200
+			return new_instance
 		except Exception as e:
-			ap(e)
-			raise
+			return CustomError(
+				message=type(e).__name__,
+				code=400,
+				details=str(e)
+			)
 
 	def delete(self):
 		"""Delete instance from database"""

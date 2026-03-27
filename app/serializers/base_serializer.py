@@ -11,7 +11,7 @@ class BaseSerializer:
 	def render(cls, obj):
 		if type(obj) is CustomError:
 			return obj.to_dict(), 400
-		return cls(obj).to_dict()
+		return cls(obj).to_dict() # construct object with cls(obj) which serializes
 
 	@classmethod
 	def render_list(cls, obj_list):

@@ -1,8 +1,10 @@
 import json
-import pytest as p
-from tests.conftest import focus
-from app.models.user import User
+from tests.conftest import focus # Leave here for focus
 from ..factories.user_factory import UserFactory
+from faker import Faker
+
+from app import ap
+fake = Faker()
 
 class TestUserController:
 
@@ -12,19 +14,20 @@ class TestUserController:
 		assert response.status_code == 200
 		assert response.json == []
 
+	@focus
 	def test_create_user(self, client):
 		data = {
-			"email": "test@example.com",
-			"first_name": "John",
-			"last_name": "Doe"
+			"first_name": fake.first_name(),
+			"last_name": fake.last_name(),
+			"email": fake.email(),
 		}
 
-		response = client.post('/users/', json=data)
-		assert response.status_code == 200
+		response = client.post('/users/create_user', json=data)
 
-		data = response.json
-		assert data['email'] == "test@example.com"
-		assert data['first_name'] == "John"
+		assert response.status_code == 200
+		assert response.json['first_name'] == data["first_name"]
+		assert response.json['last_name'] == data["last_name"]
+		assert response.json['email'] == data["email"]
 
 	class TestGetUser:
 
@@ -36,11 +39,11 @@ class TestUserController:
 			assert response.json["id"] == user.id
 			# TODO response schema
 
-		@focus
-		def test_not_found(self, client):
+		def test_record_not_found(self, client):
 			# TODO enter params schema
-			user = UserFactory.create()
+			UserFactory.create()
 			response = client.get(f"users/get_user/9999")
-			assert response.status_code == 404
-			# assert response.json["id"] == user.id
+			assert response.status_code == 400
+			assert response.json["message"] == "Not found"
+			assert response.json["details"] == "User record with ID 9999 doesn't exist"
 			# TODO response schema
