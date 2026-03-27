@@ -1,4 +1,4 @@
-from app.serializers.BaseSerializer import BaseSerializer
+from app.serializers.base_serializer import BaseSerializer
 
 class UserSerializer(BaseSerializer):
 	def __init__(self, user):
