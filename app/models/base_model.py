@@ -21,7 +21,7 @@ class BaseModel(db.Model):
 
 	@classmethod
 	def get(cls, obj_id):
-		record = cls.query.get(obj_id)
+		record = db.session.get(cls, obj_id)
 		if record is None:
 			return CustomError(
 				message="Not found",
@@ -29,7 +29,7 @@ class BaseModel(db.Model):
 				details=f"{cls.__name__} record with ID {obj_id} doesn't exist")
 		return record
 
-	def save(self):
+	def _save(self):
 		db.session.add(self)
 		db.session.commit()
 		return self
@@ -38,7 +38,7 @@ class BaseModel(db.Model):
 	def create(cls, **kwargs):
 		try:
 			new_instance = cls(**kwargs)
-			new_instance.save()
+			new_instance._save()
 			return new_instance
 		except Exception as e:
 			return CustomError(
