@@ -20,7 +20,7 @@ class BaseModel(db.Model):
 				details=str(e))
 
 	@classmethod
-	def get(cls, obj_id):
+	def find(cls, obj_id):
 		record = db.session.get(cls, obj_id)
 		if record is None:
 			return CustomError(

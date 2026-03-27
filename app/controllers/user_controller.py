@@ -10,7 +10,7 @@ def get_users():
 	users = User.all()
 	return UserSerializer.render_list(users)
 
-@user_bp.route("/create_user", methods=["POST"])
+@user_bp.route("/", methods=["POST"])
 def create_user():
 	# TODO define strong params to validate and filter received data
 	user_params = request.get_json()
@@ -18,7 +18,13 @@ def create_user():
 	user = User.create(**user_params)
 	return UserSerializer.render(user)
 
-@user_bp.route("/get_user/<user_id>", methods=["GET"])
+@user_bp.route("/<user_id>", methods=["GET"])
 def get_user(user_id):
-	user = User.get(user_id)
+	user = User.find(user_id)
 	return UserSerializer.render(user)
+
+# @user_bp.route("/<user_id>", methods=["PUT"]) # Update user
+
+# @user_bp.route("/<user_id>", methods=["POST"]) # Soft delete
+
+

@@ -32,7 +32,7 @@ class TestUserController:
 			"email": fake.email(),
 		}
 
-		response = client.post('/users/create_user', json=data)
+		response = client.post('/users/', json=data)
 
 		assert response.status_code == 200
 		assert response.json['first_name'] == data["first_name"]
@@ -44,7 +44,7 @@ class TestUserController:
 		def test_get_user(self, client):
 			# TODO enter params schema
 			user = UserFactory.create()
-			response = client.get(f"users/get_user/{user.id}")
+			response = client.get(f"users/{user.id}")
 			assert response.status_code == 200
 			assert response.json["id"] == user.id
 			# TODO response schema
@@ -52,7 +52,7 @@ class TestUserController:
 		def test_record_not_found(self, client):
 			# TODO enter params schema
 			UserFactory.create()
-			response = client.get(f"users/get_user/9999")
+			response = client.get(f"users/9999")
 			assert response.status_code == 400
 			assert response.json["message"] == "Not found"
 			assert response.json["details"] == "User record with ID 9999 doesn't exist"
