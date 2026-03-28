@@ -1,6 +1,6 @@
 import factory
 from faker import Faker
-from app.models.user import User
+from app.models.user import User, UserStatus
 from datetime import datetime, timezone
 from db.utils.id_generator import IDGenerator
 from db.base import db
@@ -17,6 +17,7 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
 	first_name = factory.LazyAttribute(lambda _: fake.first_name())
 	last_name = factory.LazyAttribute(lambda _: fake.last_name())
 	email = factory.LazyAttribute(lambda _: fake.email())
+	status = UserStatus.ACTIVE
 	created_at = factory.LazyAttribute(lambda _: datetime.now(timezone.utc))
 	updated_at = factory.LazyAttribute(lambda _: datetime.now(timezone.utc))
 
