@@ -9,6 +9,7 @@ fake = Faker()
 
 class TestUserController:
 	class TestGetUsers:
+
 		def test_get_users(self, client):
 			users = UserFactory.create_batch(3)
 			"""Test GET /users when no users exist"""
@@ -37,6 +38,7 @@ class TestUserController:
 		assert response.json['email'] == data["email"]
 
 	class TestGetUser:
+
 		def test_get_user(self, client):
 			# TODO enter params schema
 			user = UserFactory.create()

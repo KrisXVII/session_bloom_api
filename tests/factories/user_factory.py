@@ -3,7 +3,6 @@ import factory
 from faker import Faker
 from app.models.user import User, UserStatus
 from datetime import datetime, timezone
-from db.utils.id_generator import IDGenerator
 from db.base import db
 
 fake = Faker()
@@ -15,7 +14,7 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
 		sqlalchemy_session_persistence = "commit"
 
 	id = factory.LazyAttribute(lambda _: uuid.uuid4())
-	code = factory.LazyAttribute(lambda _: IDGenerator.generate_user_code())
+	# code = factory.LazyAttribute(lambda _: IDGenerator.generate_user_code()) # model in init handles this
 	first_name = factory.LazyAttribute(lambda _: fake.first_name())
 	last_name = factory.LazyAttribute(lambda _: fake.last_name())
 	email = factory.LazyAttribute(lambda _: fake.email())

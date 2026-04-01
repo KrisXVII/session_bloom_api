@@ -19,10 +19,12 @@ class Counter(BaseModel):
 				description=description or f"Counter for {name}"
 			)
 			db.session.add(counter)
+			db.session.flush()
 		return counter
 
 	def next(self):
 		self.value += 1
+		db.session.flush()
 		return self.value
 
 COUNTER_CONFIG = {
