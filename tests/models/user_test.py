@@ -1,17 +1,36 @@
 from app.models.user import User
+from app.models.counter import Counter
 from tests.conftest import focus
+from app import ap
 
 class TestUserModel:
 
 	def test_create_user(self, db):
-		"""Test creating a user"""
-		user = User(
+
+		user = User.create(
 			email="test@example.com",
 			first_name="John",
 			last_name="Doe"
 		)
-		db.session.add(user)
-		db.session.commit()
 
 		assert user.id is not None
 		assert user.email == "test@example.com"
+		assert len(Counter.all()) is not 0
+
+	def test_create_user_with_existing_counter(self, db):
+
+		Counter.create(
+			name="user",
+			value=1068441172,
+			description=f"Counter for user"
+		)
+
+		user = User.create(
+			email="test@example.com",
+			first_name="John",
+			last_name="Doe"
+		)
+
+		assert user.id is not None
+		assert user.email == "test@example.com"
+		assert len(Counter.all()) is not 0

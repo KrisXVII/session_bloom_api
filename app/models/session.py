@@ -7,7 +7,7 @@ class Session(db.Model):
 
 	# 1 to 1, a Session belong only to a User
 
-	id = db.Column(db.String(20), primary_key=True, default=IDGenerator.generate_session_uid)
+	id = db.Column(db.String(20), primary_key=True, default=IDGenerator.generate_session_code)
 	activity = db.Column(db.String(50), nullable=False)
 	user_id = db.Column(db.String(20), db.ForeignKey("users.id"))
 	user = db.relationship("User", back_populates="sessions", lazy=True)

@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from ..serializers.user_serializer import UserSerializer
 from app.models.user import User
 from app import ap
+from app.utils.custom_error import CustomError
 
 user_bp = Blueprint("user", __name__)
 
@@ -20,7 +21,14 @@ def create_user():
 
 @user_bp.route("/<user_id>", methods=["GET"])
 def get_user(user_id):
+
 	user = User.find(user_id)
+	if user is None:
+		raise CustomError(
+			message=f"Record not found",
+			code=404,
+			details=f"User object with ID {user_id} does not exist"
+		)
 	return UserSerializer.render(user)
 
 # @user_bp.route("/<user_id>", methods=["PUT"]) # Update user

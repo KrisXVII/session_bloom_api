@@ -1,7 +1,11 @@
+import db.utils.id_generator
 from db.base import db
 from datetime import datetime, timezone
 from app import ap
 from app.utils.custom_error import CustomError
+import uuid
+import enum
+
 class BaseModel(db.Model):
 	__abstract__ = True
 
@@ -21,12 +25,15 @@ class BaseModel(db.Model):
 
 	@classmethod
 	def find(cls, obj_id):
-		record = db.session.get(cls, obj_id)
-		if record is None:
-			return CustomError(
-				message="Not found",
+		try:
+			obj_id = uuid.UUID(obj_id)
+		except (ValueError, TypeError):
+			raise CustomError(
+				message="Invalid ID format",
 				code=400,
-				details=f"{cls.__name__} record with ID {obj_id} doesn't exist")
+				details=f"'{obj_id}' is not a valid UUID"
+			)
+		record = db.session.get(cls, obj_id)
 		return record
 
 	def _save(self):
@@ -41,7 +48,7 @@ class BaseModel(db.Model):
 			new_instance._save()
 			return new_instance
 		except Exception as e:
-			return CustomError(
+			raise CustomError(
 				message=type(e).__name__,
 				code=400,
 				details=str(e)
@@ -58,5 +65,7 @@ class BaseModel(db.Model):
 			value = getattr(self, column.name)
 			if isinstance(value, datetime):
 				value = value.isoformat()
+			if issubclass(type(value), enum.Enum):
+				value = value.value
 			result[column.name] = value
 		return result

@@ -3,6 +3,7 @@ from flask import Flask
 from db.base import db
 from rich.console import Console
 from rich.pretty import Pretty
+from app.utils.custom_error import CustomError
 
 console = Console()
 
@@ -27,6 +28,10 @@ def create_app(config_name=None):
 
 	app.register_blueprint(user_bp, url_prefix='/users')
 	# app.register_blueprint(session_bp, url_prefix='/sessions')
+
+	@app.errorhandler(CustomError)
+	def handle_custom_error(e):
+		return e.to_dict(), e.code
 
 	@app.route('/')
 	def hello_world():
