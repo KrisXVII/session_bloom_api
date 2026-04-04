@@ -4,7 +4,6 @@ from db.utils.id_generator import IDGenerator
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
-
 class Session(db.Model):
 	__tablename__ = "sessions"
 
