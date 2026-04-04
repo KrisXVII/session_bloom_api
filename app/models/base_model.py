@@ -54,6 +54,20 @@ class BaseModel(db.Model):
 				details=str(e)
 			)
 
+	def update(self, **kwargs):
+		try:
+			for key, value in kwargs.items():
+				if hasattr(self, key):
+					setattr(self, key, value)
+			self._save()
+			return self
+		except Exception as e:
+			raise CustomError(
+				message=type(e).__name__,
+				code=400,
+				details=str(e)
+			)
+
 	def delete(self):
 		"""Delete instance from database"""
 		db.session.delete(self)
