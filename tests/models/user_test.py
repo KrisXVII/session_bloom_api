@@ -2,6 +2,7 @@ from app.models.user import User
 from app.models.counter import Counter
 from tests.conftest import focus
 from app import ap
+from app.models.user import UserStatus
 
 class TestUserModel:
 
@@ -10,7 +11,8 @@ class TestUserModel:
 		user = User.create(
 			email="test@example.com",
 			first_name="John",
-			last_name="Doe"
+			last_name="Doe",
+			status=UserStatus.ACTIVE
 		)
 
 		assert user.id is not None
@@ -28,7 +30,8 @@ class TestUserModel:
 		user = User.create(
 			email="test@example.com",
 			first_name="John",
-			last_name="Doe"
+			last_name="Doe",
+			status=UserStatus.ACTIVE
 		)
 
 		assert user.id is not None

@@ -15,8 +15,8 @@ class User(BaseModel):
 	code = db.Column(db.String(20), unique=True, nullable=False)
 	first_name = db.Column(db.String(50), nullable=False)
 	last_name = db.Column(db.String(50), nullable=False)
+	status = db.Column(SQLEnum(UserStatus), nullable=False)
 	email = db.Column(db.String(120), unique=True, nullable=False)
-	status = db.Column(SQLEnum(UserStatus), nullable=False, default=UserStatus.ACTIVE)
 
 	sessions = db.relationship("Session", back_populates="user", lazy=True)
 

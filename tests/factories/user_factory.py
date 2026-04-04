@@ -4,6 +4,7 @@ from faker import Faker
 from app.models.user import User, UserStatus
 from datetime import datetime, timezone
 from db.base import db
+import random
 
 fake = Faker()
 
@@ -18,7 +19,7 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
 	first_name = factory.LazyAttribute(lambda _: fake.first_name())
 	last_name = factory.LazyAttribute(lambda _: fake.last_name())
 	email = factory.LazyAttribute(lambda _: fake.email())
-	status = UserStatus.ACTIVE
+	status = factory.LazyAttribute(lambda _: random.choice(list(UserStatus)))
 	created_at = factory.LazyAttribute(lambda _: datetime.now(timezone.utc))
 	updated_at = factory.LazyAttribute(lambda _: datetime.now(timezone.utc))
 
