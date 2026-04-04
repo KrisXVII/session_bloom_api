@@ -7,7 +7,9 @@ from app import ap
 
 fake = Faker()
 
+
 class TestUserController:
+
 	class TestGetUsers:
 
 		def test_get_users(self, client):
@@ -23,19 +25,20 @@ class TestUserController:
 			assert response.status_code == 200
 			assert response.json == []
 
-	def test_create_user(self, client):
-		data = {
-			"first_name": fake.first_name(),
-			"last_name": fake.last_name(),
-			"email": fake.email(),
-		}
+	class TestCreateUser:
+		def test_create_user(self, client):
+			data = {
+				"first_name": fake.first_name(),
+				"last_name": fake.last_name(),
+				"email": fake.email(),
+			}
 
-		response = client.post('/users/', json=data)
+			response = client.post('/users/', json=data)
 
-		assert response.status_code == 200
-		assert response.json['first_name'] == data["first_name"]
-		assert response.json['last_name'] == data["last_name"]
-		assert response.json['email'] == data["email"]
+			assert response.status_code == 200
+			assert response.json['first_name'] == data["first_name"]
+			assert response.json['last_name'] == data["last_name"]
+			assert response.json['email'] == data["email"]
 
 	class TestGetUser:
 
@@ -52,13 +55,40 @@ class TestUserController:
 		def test_record_not_found(self, client):
 			# TODO enter params schema
 			UserFactory.create()
-			response = client.get(f"users/{uuid.uuid4()}")
+			response = client.get(f"/users/{uuid.uuid4()}")
 			assert response.status_code == 404
 
 		# TODO response schema
 
 		def test_invalid_type(self, client):
 			UserFactory.create()
-			response = client.get(f"users/9999")
+			response = client.get(f"/users/9999")
 			assert response.status_code == 400
 			assert response.json["message"] == "Invalid ID format"
+
+	class TestUpdateUser:
+
+		def test_update_user(self, client):
+			user = UserFactory.create()
+			data = {
+				"email": fake.email(),
+			}
+
+			response = client.put(f"/users/{user.id}", json=data)
+
+			assert response.status_code == 200
+			assert response.json["id"] == str(user.id)
+			assert response.json["email"] == data["email"]
+
+		@focus
+		def test_update_non_existent_user(self, client):
+			UserFactory.create()
+			data = {
+				"email": fake.email(),
+			}
+			wrong_uuid = uuid.uuid4()
+			response = client.put(f"/users/{wrong_uuid}", json=data)
+
+			assert response.status_code == 404
+			assert response.json["message"] == "Record not found"
+			assert response.json["details"] == f"User object with ID {wrong_uuid} does not exist"

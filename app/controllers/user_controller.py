@@ -1,12 +1,13 @@
 from flask import Blueprint, request
 from ..serializers.user_serializer import UserSerializer
-from schemas.user_schemas import UserCreateSchema
+from schemas.user_schemas import UserCreateSchema, UserUpdateSchema
 from app.models.user import User, UserStatus
 from app import ap
 from app.utils.custom_error import CustomError
 from marshmallow import ValidationError
 
 user_bp = Blueprint("user", __name__)
+
 
 @user_bp.route("/", methods=["GET"])
 def get_users():
@@ -22,21 +23,30 @@ def create_user():
 
 @user_bp.route("/<user_id>", methods=["GET"])
 def get_user(user_id):
+	user = _set_user(user_id)
+	return UserSerializer.render(user)
 
-	user = User.find(user_id)
-	if user is None:
+@user_bp.route("/<user_id>", methods=["PUT"])
+def update_user(user_id):
+	user = _set_user(user_id)
+	params = _set_user_params(UserUpdateSchema)
+	user.update(**params)
+	return UserSerializer.render(user)
+
+# @user_bp.route("/<user_id>", methods=["POST"]) # Soft delete
+
+##### PRIVATE METHODS #####
+
+def _set_user(user_id):
+	user_instance = User.find(user_id)
+	if not user_instance:
 		raise CustomError(
 			message=f"Record not found",
 			code=404,
 			details=f"User object with ID {user_id} does not exist"
 		)
-	return UserSerializer.render(user)
+	return user_instance
 
-# @user_bp.route("/<user_id>", methods=["PUT"]) # Update user
-
-# @user_bp.route("/<user_id>", methods=["POST"]) # Soft delete
-
-##### PRIVATE METHODS #####
 
 def _set_user_params(schema_class):
 	try:

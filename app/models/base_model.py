@@ -6,6 +6,7 @@ from app.utils.custom_error import CustomError
 import uuid
 import enum
 
+
 class BaseModel(db.Model):
 	__abstract__ = True
 
@@ -46,30 +47,16 @@ class BaseModel(db.Model):
 
 	@classmethod
 	def create(cls, **kwargs):
-		try:
-			new_instance = cls(**kwargs)
-			new_instance._save()
-			return new_instance
-		except Exception as e:
-			raise CustomError(
-				message=type(e).__name__,
-				code=400,
-				details=str(e)
-			)
+		new_instance = cls(**kwargs)
+		new_instance._save()
+		return new_instance
 
 	def update(self, **kwargs):
-		try:
-			for key, value in kwargs.items():
-				if hasattr(self, key):
-					setattr(self, key, value)
-			self._save()
-			return self
-		except Exception as e:
-			raise CustomError(
-				message=type(e).__name__,
-				code=400,
-				details=str(e)
-			)
+		for key, value in kwargs.items():
+			if hasattr(self, key):
+				setattr(self, key, value)
+		self._save()
+		return self
 
 	def delete(self):
 		"""Delete instance from database"""
