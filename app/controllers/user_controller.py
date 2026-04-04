@@ -15,15 +15,9 @@ def get_users():
 
 @user_bp.route("/", methods=["POST"])
 def create_user():
-	# TODO define strong params to validate and filter received data
-	schema = UserCreateSchema()
-	try:
-		user_params = schema.load(request.get_json())
-	except ValidationError as err:
-		raise CustomError("Validation error", 400, err.messages)
-	user_params = request.get_json()
-	user_params["status"] = UserStatus.ACTIVE
-	user = User.create(**user_params)
+	params = _set_user_params(UserCreateSchema)
+	params["status"] = UserStatus.ACTIVE
+	user = User.create(**params)
 	return UserSerializer.render(user)
 
 @user_bp.route("/<user_id>", methods=["GET"])
@@ -42,4 +36,11 @@ def get_user(user_id):
 
 # @user_bp.route("/<user_id>", methods=["POST"]) # Soft delete
 
+##### PRIVATE METHODS #####
+
+def _set_user_params(schema_class):
+	try:
+		return schema_class().load(request.get_json())
+	except ValidationError as err:
+		raise CustomError("Validation error", 400, err.messages)
 
