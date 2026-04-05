@@ -59,7 +59,6 @@ class BaseModel(db.Model):
 		return self
 
 	def delete(self):
-		"""Delete instance from database"""
 		db.session.delete(self)
 		db.session.commit()
 

@@ -1,7 +1,5 @@
 from app.utils.custom_error import CustomError
 from app import ap
-from flask import jsonify
-
 
 class BaseSerializer:
 	__abstract__ = True
@@ -18,3 +16,7 @@ class BaseSerializer:
 		if type(obj_list) is CustomError:
 			return obj_list.to_dict(), 400
 		return [cls(obj).to_dict() for obj in obj_list], 200
+
+	@classmethod
+	def no_content(cls):
+		return "", 204

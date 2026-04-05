@@ -4,12 +4,13 @@ from ..factories.user_factory import UserFactory
 from faker import Faker
 from ..helpers import response_fields, list_fields
 from app import ap
+from app.models.user import User
+
 
 fake = Faker()
 
 
 class TestUserController:
-
 	class TestGetUsers:
 
 		def test_get_users(self, client):
@@ -80,7 +81,6 @@ class TestUserController:
 			assert response.json["id"] == str(user.id)
 			assert response.json["email"] == data["email"]
 
-		@focus
 		def test_update_non_existent_user(self, client):
 			UserFactory.create()
 			data = {
@@ -92,3 +92,15 @@ class TestUserController:
 			assert response.status_code == 404
 			assert response.json["message"] == "Record not found"
 			assert response.json["details"] == f"User object with ID {wrong_uuid} does not exist"
+
+	class TestDeleteUser:
+
+		def test_delete_user(self, client):
+			user = UserFactory.create()
+
+			response = client.delete(f"/users/{user.id}")
+
+			assert response.status_code == 204
+			assert len(User.all()) == 0
+			assert response.json is None
+

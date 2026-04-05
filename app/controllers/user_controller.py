@@ -33,7 +33,11 @@ def update_user(user_id):
 	user.update(**params)
 	return UserSerializer.render(user)
 
-# @user_bp.route("/<user_id>", methods=["POST"]) # Soft delete
+@user_bp.route("/<user_id>", methods=["DELETE"])
+def delete_user(user_id):
+	user = _set_user(user_id)
+	user.delete()
+	return UserSerializer.no_content()
 
 ##### PRIVATE METHODS #####
 
@@ -53,4 +57,3 @@ def _set_user_params(schema_class):
 		return schema_class().load(request.get_json())
 	except ValidationError as err:
 		raise CustomError("Validation error", 400, err.messages)
-
