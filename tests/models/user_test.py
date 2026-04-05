@@ -21,7 +21,7 @@ class TestUserModel:
 
 	def test_create_user_with_existing_counter(self, db):
 
-		Counter.create(
+		counter = Counter.create(
 			name="user",
 			value=1068441172,
 			description=f"Counter for user"
@@ -37,3 +37,4 @@ class TestUserModel:
 		assert user.id is not None
 		assert user.email == "test@example.com"
 		assert len(Counter.all()) is not 0
+		assert counter.value == 1068441173
