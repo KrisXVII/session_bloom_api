@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from ..serializers.user_serializer import UserSerializer
+from ..serializers.base_serializer import BaseSerializer
 from schemas.user_schemas import UserCreateSchema, UserUpdateSchema
 from app.models.user import User, UserStatus
 from app import ap
@@ -37,7 +38,7 @@ def update_user(user_id):
 def delete_user(user_id):
 	user = _set_user(user_id)
 	user.delete()
-	return UserSerializer.no_content()
+	return BaseSerializer.no_content()
 
 ##### PRIVATE METHODS #####
 

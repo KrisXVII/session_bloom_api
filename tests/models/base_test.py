@@ -16,9 +16,9 @@ class TestBaseModel:
 			status=UserStatus.ACTIVE
 		)
 
-		found = User.find(str(user.id))
+		found = User.find(user.id_s)
 		assert found is not None
-		assert found.id == user.id
+		assert found.id_s == user.id_s
 
 	def test_find_returns_none_for_missing(self, session):
 		"""Test find() returns None for non-existent ID"""
@@ -49,8 +49,8 @@ class TestBaseModel:
 
 		users = User.all()
 		assert len(users) == 2
-		assert user1.id in [u.id for u in users]
-		assert user2.id in [u.id for u in users]
+		assert user1.id_s in [u.id_s for u in users]
+		assert user2.id_s in [u.id_s for u in users]
 
 	def test_create_saves_and_returns_instance(self, session):
 		"""Test create() saves and returns instance"""
@@ -61,11 +61,11 @@ class TestBaseModel:
 			status=UserStatus.ACTIVE
 		)
 
-		assert user.id is not None
+		assert user.id_s is not None
 		assert user.created_at is not None
 
 		# Verify saved in DB
-		found = User.find(str(user.id))
+		found = User.find(user.id_s)
 		assert found is not None
 		# assert found.status == 0
 		assert found.email == "create_test@example.com"
@@ -85,7 +85,7 @@ class TestBaseModel:
 		assert user.last_name == "Changed"
 
 		# Verify persisted
-		found = User.find(str(user.id))
+		found = User.find(user.id_s)
 		assert found.first_name == "Updated"
 		assert found.last_name == "Changed"
 
@@ -113,16 +113,15 @@ class TestBaseModel:
 			last_name="Me",
 			status=UserStatus.ACTIVE
 		)
-		user_id = user.id
 
 		# Verify exists
-		assert User.find(str(user_id)) is not None
+		assert User.find(user.id_s) is not None
 
 		# Delete
 		user.delete()
 
 		# Verify gone
-		assert User.find(str(user_id)) is None
+		assert User.find(user.id_s) is None
 
 	def test_to_dict_returns_formatted_dict(self, session):
 		"""Test to_dict() returns correctly formatted dictionary"""
@@ -136,7 +135,7 @@ class TestBaseModel:
 		result = user.to_dict()
 
 		assert isinstance(result, dict)
-		assert str(result['id']) == str(user.id)
+		assert str(result['id']) == str(user.id_s)
 		assert result['email'] == "dict_test@example.com"
 		assert result['first_name'] == "Dict"
 		assert result['last_name'] == "Test"
