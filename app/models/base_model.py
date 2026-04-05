@@ -22,9 +22,9 @@ class BaseModel(db.Model):
 			records = cls.query.all()
 			return records
 		except Exception as e:
-			return CustomError(
+			raise CustomError(
 				message=type(e).__name__,
-				code=400,
+				code=500,
 				details=str(e))
 
 	@classmethod
