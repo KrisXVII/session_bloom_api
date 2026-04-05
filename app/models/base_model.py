@@ -52,11 +52,6 @@ class BaseModel(db.Model):
 		record = db.session.get(cls, obj_id)
 		return record
 
-	def _save(self):
-		db.session.add(self)
-		db.session.commit()
-		return self
-
 	@classmethod
 	def create(cls, **kwargs):
 		new_instance = cls(**kwargs)
@@ -86,3 +81,9 @@ class BaseModel(db.Model):
 				value = value.value
 			result[column.name] = value
 		return result
+
+	def _save(self):
+		db.session.add(self)
+		db.session.commit()
+		return self
+	
