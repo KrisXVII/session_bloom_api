@@ -1,4 +1,7 @@
 import uuid
+
+import pytest
+
 from tests.conftest import focus  # Leave here for focus
 from ..factories.user_factory import UserFactory
 from faker import Faker
@@ -13,8 +16,11 @@ fake = Faker()
 class TestUserController:
 	class TestGetUsers:
 
-		def test_get_users(self, client):
-			users = UserFactory.create_batch(3)
+		@pytest.fixture
+		def users(self):
+			return UserFactory.create_batch(3)
+
+		def test_get_users(self, client, users):
 			"""Test GET /users when no users exist"""
 			response = client.get('/users/')
 			assert response.status_code == 200
@@ -43,26 +49,27 @@ class TestUserController:
 
 	class TestGetUser:
 
+		@pytest.fixture(autouse=True)
+		def create_user(self, db):
+			self.user = UserFactory.create()
+
 		def test_get_user(self, client):
 			# TODO enter params schema
-			user = UserFactory.create()
-			response = client.get(f"users/{user.id}")
+			response = client.get(f"users/{self.user.id}")
 			assert response.status_code == 200
-			assert response.json["id"] == str(user.id)
-			assert response.json["code"] == user.code
+			assert response.json["id"] == str(self.user.id)
+			assert response.json["code"] == self.user.code
 
 		# TODO response schema
 
 		def test_record_not_found(self, client):
 			# TODO enter params schema
-			UserFactory.create()
 			response = client.get(f"/users/{uuid.uuid4()}")
 			assert response.status_code == 404
 
 		# TODO response schema
 
 		def test_invalid_type(self, client):
-			UserFactory.create()
 			response = client.get(f"/users/9999")
 			assert response.status_code == 400
 			assert response.json["message"] == "Invalid ID format"
