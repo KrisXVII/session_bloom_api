@@ -4,6 +4,7 @@ from db.base import db
 from rich.console import Console
 from rich.pretty import Pretty
 from app.utils.custom_error import CustomError
+from flasgger import Swagger
 
 console = Console()
 
@@ -21,6 +22,15 @@ def create_app(config_name=None):
 	app.config.from_object(config.get(config_name, config['default']))
 
 	db.init_app(app)
+
+	Swagger(app, template={
+		'swagger': '2.0',
+		'info': {
+			'title': 'SessionBloom API',
+			'description': 'API for timer and session management',
+			'version': '1.0.0'
+		},
+	})
 
 	# Register blueprints
 	from app.controllers.user_controller import user_bp
