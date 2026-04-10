@@ -31,6 +31,12 @@ definitions:
       updated_at:
         type: string
         format: date-time
+  Session:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Session UUID
 
 paths:
   /users:
@@ -68,13 +74,12 @@ paths:
               last_name:
                 type: string
       responses:
-        201:
+        200:
           description: User created
           schema:
             $ref: '#/definitions/User'
         400:
           description: Validation error
-
   /users/{user_id}:
     get:
       tags:

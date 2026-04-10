@@ -1,15 +1,12 @@
-import uuid
-import pytest
-from tests.conftest import focus  # Leave here for focus
+import uuid, pytest
 from ..factories.user_factory import UserFactory
 from faker import Faker
-from ..helpers import response_fields, list_fields
-from app import ap
+from ..helpers import *
+from ..schemas.user_schema import UserSchema
 from app.models.user import User
-
+from app import ap
 
 fake = Faker()
-
 
 class TestUserController:
 	class TestGetUsers:
@@ -18,9 +15,10 @@ class TestUserController:
 		def users(self):
 			return UserFactory.create_batch(3)
 
-		def test_get_users(self, client, users):
+		def test_get_users(self, client, users, assert_valid_schema):
 			"""Test GET /users when no users exist"""
 			response = client.get('/users/')
+			assert_valid_schema(response.json, UserSchema, many=True)
 			assert response.status_code == 200
 			assert len(response.json) == 3
 			assert response_fields(response.json, "code") == list_fields(users, "code")
@@ -31,7 +29,7 @@ class TestUserController:
 			assert response.json == []
 
 	class TestCreateUser:
-		def test_create_user(self, client):
+		def test_create_user(self, client, assert_valid_schema):
 			data = {
 				"first_name": fake.first_name(),
 				"last_name": fake.last_name(),
@@ -39,8 +37,8 @@ class TestUserController:
 			}
 
 			response = client.post('/users/', json=data)
+			assert_valid_schema(response.json, UserSchema)
 
-			assert response.status_code == 200
 			assert response.json['first_name'] == data["first_name"]
 			assert response.json['last_name'] == data["last_name"]
 			assert response.json['email'] == data["email"]

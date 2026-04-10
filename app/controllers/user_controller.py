@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 from ..serializers.user_serializer import UserSerializer
-from ..serializers.base_serializer import BaseSerializer
-from schemas.user_schemas import UserCreateSchema, UserUpdateSchema
+from params_schemas.user_schemas import *
 from app.models.user import User, UserStatus
 from app import ap
 from app.utils.custom_error import CustomError
@@ -11,6 +10,7 @@ user_bp = Blueprint("user", __name__)
 
 
 @user_bp.route("/", methods=["GET"])
+# @swag_from('../swagger/paths/users.yml#create_user')
 def get_users():
 	users = User.all()
 	return UserSerializer.render_list(users)
@@ -38,7 +38,7 @@ def update_user(user_id):
 def delete_user(user_id):
 	user = _set_user(user_id)
 	user.delete()
-	return BaseSerializer.no_content()
+	return UserSerializer.no_content()
 
 ##### PRIVATE METHODS #####
 

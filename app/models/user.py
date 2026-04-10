@@ -1,4 +1,3 @@
-
 from db.base import db
 from db.utils.id_generator import IDGenerator
 from app.models.base_model import BaseModel
@@ -26,8 +25,6 @@ class User(BaseModel):
 			code = IDGenerator.generate_user_code()
 			kwargs["code"] = code
 		super().__init__(**kwargs)
-
-
 
 	@property
 	def status_s(self):

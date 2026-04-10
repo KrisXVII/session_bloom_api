@@ -12,6 +12,11 @@ def ap(obj):
 	console.print("\n")
 	console.print(Pretty(obj, expand_all=True))
 
+def log_error(obj, style="red"):
+	console.print("\n")
+	if style and isinstance(obj, str):
+		console.print(f"[{style}]{obj}[/{style}]")
+
 def create_app(config_name=None):
 	app = Flask(__name__)
 
