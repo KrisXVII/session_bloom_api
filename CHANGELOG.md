@@ -14,6 +14,7 @@ This file was created with ChangelogManager 0.0.1, do not modify it directly.
 - User status as PG DataType
 - Counter model for UNIQUE codes and id as UUID
 - Test suite for controllers and models
+- Swagger
 
 [//]: # (## [0.1.0] - release date)
 

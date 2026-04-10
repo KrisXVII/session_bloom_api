@@ -23,7 +23,7 @@ def create_app(config_name=None):
 
 	db.init_app(app)
 
-	Swagger(app, template={
+	swagger = Swagger(app, template={
 		'swagger': '2.0',
 		'info': {
 			'title': 'SessionBloom API',
