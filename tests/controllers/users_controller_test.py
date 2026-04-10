@@ -1,7 +1,5 @@
 import uuid
-
 import pytest
-
 from tests.conftest import focus  # Leave here for focus
 from ..factories.user_factory import UserFactory
 from faker import Faker

@@ -1,4 +1,4 @@
-import os
+import os, yaml
 from flask import Flask
 from db.base import db
 from rich.console import Console
@@ -23,14 +23,10 @@ def create_app(config_name=None):
 
 	db.init_app(app)
 
-	swagger = Swagger(app, template={
-		'swagger': '2.0',
-		'info': {
-			'title': 'SessionBloom API',
-			'description': 'API for timer and session management',
-			'version': '1.0.0'
-		},
-	})
+	with open('swagger.yaml', 'r') as f:
+		swagger_template = yaml.safe_load(f)
+
+	swagger = Swagger(app, template=swagger_template)
 
 	# Register blueprints
 	from app.controllers.user_controller import user_bp
