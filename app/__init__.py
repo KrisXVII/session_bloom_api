@@ -35,10 +35,10 @@ def create_app(config_name=None):
 
 	# Register blueprints
 	from app.controllers.user_controller import user_bp
-	# from app.routes.session_routes import session_bp
+	from app.controllers.session_controller import session_bp
 
 	app.register_blueprint(user_bp, url_prefix='/users')
-	# app.register_blueprint(session_bp, url_prefix='/sessions')
+	app.register_blueprint(session_bp, url_prefix='/sessions')
 
 	@app.errorhandler(CustomError)
 	def handle_custom_error(e):

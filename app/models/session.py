@@ -3,8 +3,9 @@ from datetime import datetime
 from db.utils.id_generator import IDGenerator
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
+from app.models.base_model import BaseModel
 
-class Session(db.Model):
+class Session(BaseModel):
 	__tablename__ = "sessions"
 
 	# 1 to 1, a Session belong only to a User

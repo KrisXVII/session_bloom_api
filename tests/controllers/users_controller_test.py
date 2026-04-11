@@ -1,4 +1,4 @@
-import uuid, pytest
+import uuid
 from ..factories.user_factory import UserFactory
 from faker import Faker
 from ..helpers import *
