@@ -3,6 +3,7 @@ from ..factories.user_factory import UserFactory
 from faker import Faker
 from ..helpers import *
 from ..schemas.user_schema import UserSchema
+from ..schemas.error_schemas import *
 from app.models.user import User
 from ..conftest import focus
 from app import ap
@@ -19,7 +20,7 @@ class TestUserController:
 		def test_get_users(self, client, users,):
 			"""Test GET /users when no users exist"""
 			response = client.get('/users/')
-			assert_valid_schema(response, UserSchema, many=True)
+			assert_valid_schema(response.json, UserSchema, many=True)
 
 			assert response.status_code == 200
 			assert len(response.json) == 3
@@ -27,7 +28,7 @@ class TestUserController:
 
 		def test_get_users_empty(self, client):
 			response = client.get('/users/')
-			assert_valid_schema(response, UserSchema, many=True)
+			assert_valid_schema(response.json, UserSchema, many=True)
 
 			assert response.status_code == 200
 			assert response.json == []
@@ -41,7 +42,7 @@ class TestUserController:
 			}
 
 			response = client.post('/users/', json=data)
-			assert_valid_schema(response, UserSchema)
+			assert_valid_schema(response.json, UserSchema)
 
 			assert response.json['first_name'] == data["first_name"]
 			assert response.json['last_name'] == data["last_name"]
@@ -56,23 +57,22 @@ class TestUserController:
 		def test_get_user(self, client):
 
 			response = client.get(f"users/{self.user.id}")
-			assert_valid_schema(response, UserSchema)
+			assert_valid_schema(response.json, UserSchema)
 
 			assert response.status_code == 200
 			assert response.json["id"] == str(self.user.id)
 			assert response.json["code"] == self.user.code
 
-		@focus
 		def test_record_not_found(self, client):
 
 			response = client.get(f"/users/{uuid.uuid4()}")
-			# assert_valid_schema(response, NotFoundSchema)
+			assert_valid_schema(response.json, NotFoundSchema)
 
 			assert response.status_code == 404
-			ap(response.json)
 
 		def test_invalid_type(self, client):
 			response = client.get(f"/users/9999")
+			assert_valid_schema(response.json, BadRequestSchema)
 			assert response.status_code == 400
 			assert response.json["message"] == "Invalid ID format"
 
@@ -85,6 +85,7 @@ class TestUserController:
 			}
 
 			response = client.put(f"/users/{user.id}", json=data)
+			assert_valid_schema(response.json, UserSchema)
 
 			assert response.status_code == 200
 			assert response.json["id"] == str(user.id)
@@ -97,6 +98,7 @@ class TestUserController:
 			}
 			wrong_uuid = uuid.uuid4()
 			response = client.put(f"/users/{wrong_uuid}", json=data)
+			assert_valid_schema(response.json, NotFoundSchema)
 
 			assert response.status_code == 404
 			assert response.json["message"] == "Record not found"

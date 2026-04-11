@@ -11,4 +11,3 @@ UserSchema = schemify(
 		'status': EnumField(UserStatus, by_value=True),
 	},
 )
-

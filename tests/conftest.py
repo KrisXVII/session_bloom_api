@@ -1,8 +1,6 @@
 import pytest
 from app import create_app, log_error, ap
 from db.base import db as _db
-from marshmallow import ValidationError
-
 focus = pytest.mark.focus
 
 @pytest.fixture(scope='function')

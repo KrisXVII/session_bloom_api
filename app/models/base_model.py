@@ -47,7 +47,7 @@ class BaseModel(db.Model):
 			raise CustomError(
 				message="Invalid ID format",
 				code=400,
-				details=f"'{obj_id}' is not a valid UUID"
+				details=f"Bad request: '{obj_id}' is not a valid UUID"
 			)
 		record = db.session.get(cls, obj_id)
 		return record

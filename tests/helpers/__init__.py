@@ -10,7 +10,7 @@ def list_fields(records, *fields):
 
 def assert_valid_schema(response_data, schema_class, many=False):
 	"""Global validation helper to use in tests"""
-	if not isinstance(response_data.json, (dict, list)):
+	if not isinstance(response_data, (dict, list)):
 		raise TypeError(
 			f"Expected dict or list, got {type(response_data)}. "
 			f"Did you pass SQLAlchemy objects instead of response.json?"

@@ -3,7 +3,6 @@ from .user_schema import UserSchema
 
 SCHEMAS = {
 	'user': UserSchema,
-	# 'user_list': UserListSchema,
 	'session': SessionSchema,
 }
 
