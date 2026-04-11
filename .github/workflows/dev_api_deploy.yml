@@ -1,0 +1,92 @@
+name: dev_api_deploy.yml
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+#      - name: Pull latest changes
+#        run: git pull origin dev
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        env:
+          FLASK_ENV: test
+        run: pytest
+
+  build:
+    runs-on: self-hosted
+    needs: test
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+
+
+#      - name: Pull latest changes
+#        run: git pull origin dev
+
+#      - name: Raise dev database before running migrations # To use in prod pipeline
+#        run: |
+#          pip install psycopg2-binary
+#          cd ${{secrets.PROJECT_PATH}}
+#          docker-compose -f dev_db.docker-compose.yml up -d database_dev
+#
+#      - name: Run migrations from HOST
+#        run: |
+#          cd ${{secrets.PROJECT_PATH}}
+#          export DATABASE_URL=${{secrets.DATABASE_DEV_URL}}
+#          alembic upgrade head
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13.9'
+
+      - name: Install Python dependencies
+        run: |
+          cd ${{ github.workspace }}
+          pip install -r requirements.txt
+
+      - name: Create .env from secrets
+        run: |
+          cd ${{ github.workspace }}
+          cat > .env << EOF
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          FLASK_ENV=${{ secrets.FLASK_ENV }}
+          EOF
+
+      - name: Run migrations
+        run: |
+          cd ${{ github.workspace }}
+          export DATABASE_URL=${{ secrets.DATABASE_URL }}
+          alembic upgrade head
+
+      - name: Rebuild and restart containers
+        run: |
+          cd ${{ github.workspace }}
+          docker-compose -f dev_db.docker-compose.yml down
+          docker-compose -f dev_db.docker-compose.yml up -d --build
+          docker image prune -f
