@@ -15,6 +15,7 @@ This file was created with ChangelogManager 0.0.1, do not modify it directly.
 - Counter model for UNIQUE codes and id as UUID
 - Test suite for controllers and models
 - Swagger
+- Schemifier and custom attributes for endpoint response validation
 
 [//]: # (## [0.1.0] - release date)
 

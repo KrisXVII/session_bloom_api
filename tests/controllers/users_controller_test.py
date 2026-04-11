@@ -4,6 +4,7 @@ from faker import Faker
 from ..helpers import *
 from ..schemas.user_schema import UserSchema
 from app.models.user import User
+from ..conftest import focus
 from app import ap
 
 fake = Faker()
@@ -15,21 +16,24 @@ class TestUserController:
 		def users(self):
 			return UserFactory.create_batch(3)
 
-		def test_get_users(self, client, users, assert_valid_schema):
+		def test_get_users(self, client, users,):
 			"""Test GET /users when no users exist"""
 			response = client.get('/users/')
-			assert_valid_schema(response.json, UserSchema, many=True)
+			assert_valid_schema(response, UserSchema, many=True)
+
 			assert response.status_code == 200
 			assert len(response.json) == 3
 			assert response_fields(response.json, "code") == list_fields(users, "code")
 
 		def test_get_users_empty(self, client):
 			response = client.get('/users/')
+			assert_valid_schema(response, UserSchema, many=True)
+
 			assert response.status_code == 200
 			assert response.json == []
 
 	class TestCreateUser:
-		def test_create_user(self, client, assert_valid_schema):
+		def test_create_user(self, client):
 			data = {
 				"first_name": fake.first_name(),
 				"last_name": fake.last_name(),
@@ -37,7 +41,7 @@ class TestUserController:
 			}
 
 			response = client.post('/users/', json=data)
-			assert_valid_schema(response.json, UserSchema)
+			assert_valid_schema(response, UserSchema)
 
 			assert response.json['first_name'] == data["first_name"]
 			assert response.json['last_name'] == data["last_name"]
@@ -50,20 +54,22 @@ class TestUserController:
 			self.user = UserFactory.create()
 
 		def test_get_user(self, client):
-			# TODO enter params schema
+
 			response = client.get(f"users/{self.user.id}")
+			assert_valid_schema(response, UserSchema)
+
 			assert response.status_code == 200
 			assert response.json["id"] == str(self.user.id)
 			assert response.json["code"] == self.user.code
 
-		# TODO response schema
-
+		@focus
 		def test_record_not_found(self, client):
-			# TODO enter params schema
-			response = client.get(f"/users/{uuid.uuid4()}")
-			assert response.status_code == 404
 
-		# TODO response schema
+			response = client.get(f"/users/{uuid.uuid4()}")
+			# assert_valid_schema(response, NotFoundSchema)
+
+			assert response.status_code == 404
+			ap(response.json)
 
 		def test_invalid_type(self, client):
 			response = client.get(f"/users/9999")
