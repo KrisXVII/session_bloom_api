@@ -50,7 +50,7 @@ def create_app(config_name=None):
 
 	@app.route('/test')
 	def test_pipeline():
-		test = "testtttttt"
+		test = "testttttt"
 		return 'Tested API pipeline aaaaa!'
 
 	return app
