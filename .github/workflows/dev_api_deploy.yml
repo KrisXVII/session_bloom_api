@@ -76,7 +76,7 @@ jobs:
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           FLASK_ENV=${{ secrets.FLASK_ENV }}
-          KRATOS_URL=${{ secrets.KRATOS_URL }}?sslmode=require
+          KRATOS_URL=${{ secrets.KRATOS_URL }}
           EC2_IP=${{ secrets.EC2_IP }}
           HYDRA_SECRET=${{ secrets.HYDRA_SECRET }}
           HYDRA_OIDC_SALT=${{ secrets.HYDRA_OIDC_SALT }}
