@@ -3,6 +3,58 @@ services:
 
   #redis: ...
 
+  hydra_ory:
+    image: oryd/hydra:v2.3.0
+    container_name: ory_hydra
+    ports:
+      - "4444:4444" # Public API
+      - "4445:4445" # Admin API
+    environment:
+        - DSN=${KRATOS_URL}?sslmode=require
+        - SECRETS_SYSTEM=${HYDRA_SECRET}
+
+        - URLS_SELF_ISSUER=https://${EC2_IP}:4444
+        - URLS_LOGIN=https://${EC2_IP}:5001/auth/login
+        - URLS_CONSENT=https://${EC2_IP}:5001/auth/consent
+        - URLS_ERROR=https://${EC2_IP}:5001/auth/error
+
+        - OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
+        - OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=${HYDRA_OIDC_SALT}
+        - OIDC_DYNAMIC_CLIENT_REGISTRATION_ENABLED=true
+    command: serve all  # Run both public and admin APIs
+    networks:
+      - ory_network
+    depends_on:
+      - kratos_ory
+    restart: unless-stopped
+
+  kratos_ory:
+    image: oryd/kratos:v1.3.0
+    container_name: ory_kratos
+    ports:
+      - "4433:4433"   # Public API
+      - "4434:4434"   # Admin API
+    environment:
+      - DSN=postgres://${KRATOS_URL}?sslmode=require&max_conns=20
+      - SECRETS_DEFAULT=${KRATOS_SECRET}
+      - SECRETS_COOKIE=${COOKIE_SECRET1}
+      - SECRETS_CIPHER=${COOKIE_SECRET2}
+      # Public URL
+      - URLS_SELF_PUBLIC=http://${EC2_IP}:4433
+      - URLS_SELF_ADMIN=http://kratos:4434
+
+      # Where to redirect after login
+      - URLS_DEFAULT_RETURN_TO=http://${EC2_IP}:5001
+
+      - LOG_LEVEL=debug
+    volumes:
+      # Mount configuration files
+      - ./kratos:/etc/config/kratos
+    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+    networks:
+      - ory_network
+    restart: unless-stopped
+
   backend_dev:
 
     build: .
@@ -16,3 +68,7 @@ services:
       - FLASK_RUN_HOST=0.0.0.0
       - FLASK_RUN_PORT=5000
     restart: unless-stopped
+
+networks:
+  ory_network:
+    driver: bridge

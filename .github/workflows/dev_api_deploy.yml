@@ -76,6 +76,13 @@ jobs:
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           FLASK_ENV=${{ secrets.FLASK_ENV }}
+          KRATOS_URL=${{ secrets.KRATOS_URL }}?sslmode=require
+          EC2_IP=${{ secrets.EC2_IP }}
+          HYDRA_SECRET=${{ secrets.HYDRA_SECRET }}
+          HYDRA_OIDC_SALT=${{ secrets.HYDRA_OIDC_SALT }}
+          KRATOS_SECRETS_DEFAULT=${{ secrets.KRATOS_SECRETS_DEFAULT }}
+          KRATOS_SECRETS_COOKIE=${{ secrets.KRATOS_SECRETS_COOKIE }}
+          KRATOS_SECRETS_CIPHER=${{ secrets.KRATOS_SECRETS_CIPHER }}
           EOF
 
       - name: Run migrations
