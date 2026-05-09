@@ -35,7 +35,10 @@ services:
       - "4433:4433"   # Public API
       - "4434:4434"   # Admin API
     environment:
-      - DSN=postgres://${KRATOS_URL}?sslmode=require&max_conns=20
+      - KRATOS_URL=${KRATOS_URL}
+      - EC2_IP=${EC2_IP}
+
+      - DSN=${KRATOS_URL}?sslmode=require&max_conns=20
       - SECRETS_DEFAULT=${KRATOS_SECRET}
       - SECRETS_COOKIE=${COOKIE_SECRET1}
       - SECRETS_CIPHER=${COOKIE_SECRET2}

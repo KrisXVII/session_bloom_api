@@ -72,11 +72,11 @@ log:
 
 secrets:
   default:
-    - ${KRATOS_SECRET}
+    - ${SECRETS_DEFAULT}
   cookie:
-    - ${COOKIE_SECRET1}
+    - ${SECRETS_COOKIE}
   cipher:
-    - ${COOKIE_SECRET2}
+    - ${SECRETS_CIPHER}
 
 identity:
   default_schema_id: default
