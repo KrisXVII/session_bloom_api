@@ -38,13 +38,20 @@ services:
       - KRATOS_URL=${KRATOS_URL}
       - EC2_IP=${EC2_IP}
 
-      - DSN=${KRATOS_URL}?sslmode=require&max_conns=20
+      - KRATOS_DSN=${KRATOS_URL}?sslmode=require&max_conns=20
+      - KRATOS_BASE_URL=http://${EC2_IP}:5001
       - SECRETS_DEFAULT=${KRATOS_SECRETS_DEFAULT}
       - SECRETS_COOKIE=${KRATOS_SECRETS_COOKIE}
       - SECRETS_CIPHER=${KRATOS_SECRETS_CIPHER}
       # Public URL
       - URLS_SELF_PUBLIC=http://${EC2_IP}:4433
       - URLS_SELF_ADMIN=http://kratos:4434
+      - AUTH_ERROR_URL=http://${EC2_IP}:5001/auth/error
+      - AUTH_SETTINGS_URL=http://${EC2_IP}:5001/auth/error
+      - AUTH_RECOVERY_URL=http://${EC2_IP}:5001/auth/recovery
+      - AUTH_VERIFY_URL=http://${EC2_IP}:5001/auth/verify
+      - AUTH_LOGIN_URL=http://${EC2_IP}:5001/auth/login
+      - AUTH_REGISTRATION_URL=http://${EC2_IP}:5001/auth/registration
 
       # Where to redirect after login
       - URLS_DEFAULT_RETURN_TO=http://${EC2_IP}:5001

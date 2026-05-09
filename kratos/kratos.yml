@@ -1,14 +1,14 @@
 version: v1.0.0
 
-dsn: ${KRATOS_URL}?sslmode=require
+dsn: ${KRATOS_DSN}
 
 serve:
   public:
-    base_url: http://${EC2_IP}:4433
+    base_url: ${URLS_SELF_PUBLIC}
     cors:
       enabled: true
       allowed_origins:
-        - http://${EC2_IP}:5001
+        - ${URLS_DEFAULT_RETURN_TO}
       allowed_methods:
         - POST
         - GET
@@ -23,12 +23,12 @@ serve:
         - Content-Type
         - Set-Cookie
   admin:
-    base_url: http://kratos:4434
+    base_url: ${URLS_SELF_ADMIN}
 
 selfservice:
-  default_browser_return_url: http://${EC2_IP}:5001/
+  default_browser_return_url: ${URLS_DEFAULT_RETURN_TO}
   allowed_return_urls:
-    - http://${EC2_IP}:5001
+    - ${URLS_DEFAULT_RETURN_TO}
     - http://localhost:5001
 
   methods:
@@ -42,25 +42,25 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://${EC2_IP}:5001/auth/error
+      ui_url: ${AUTH_ERROR_URL}
     settings:
-      ui_url: http://${EC2_IP}:5001/auth/settings
+      ui_url: ${AUTH_SETTINGS_URL}
       privileged_session_max_age: 15m
     recovery:
       enabled: true
-      ui_url: http://${EC2_IP}:5001/auth/recovery
+      ui_url: ${AUTH_RECOVERY_URL}
     verification:
       enabled: true
-      ui_url: http://${EC2_IP}:5001/auth/verify
+      ui_url: ${AUTH_VERIFY_URL}
     logout:
       after:
-        default_browser_return_url: http://${EC2_IP}:5001/auth/login
+        default_browser_return_url: ${AUTH_LOGIN_URL}
     login:
-      ui_url: http://${EC2_IP}:5001/auth/login
+      ui_url: ${AUTH_LOGIN_URL}
       lifespan: 10m
     registration:
       lifespan: 10m
-      ui_url: http://${EC2_IP}:5001/auth/registration
+      ui_url: ${AUTH_REGISTRATION_URL}
       after:
         password:
           hooks:
