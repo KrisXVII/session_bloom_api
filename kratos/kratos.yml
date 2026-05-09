@@ -1,14 +1,14 @@
 version: v1.0.0
 
-dsn: ${KRATOS_URL}?sslmode=require
+dsn: # ${DSN}
 
 serve:
   public:
-    base_url: http://${EC2_IP}:4433
+    base_url: # ${SERVE_PUBLIC_BASE_URL}
     cors:
       enabled: true
       allowed_origins:
-        - http://${EC2_IP}:5001
+        # - ${SERVE_PUBLIC_CORS_ALLOWED_ORIGINS_0}
       allowed_methods:
         - POST
         - GET
@@ -23,13 +23,11 @@ serve:
         - Content-Type
         - Set-Cookie
   admin:
-    base_url: http://kratos:4434
+    base_url: # ${SERVE_ADMIN_BASE_URL}
 
 selfservice:
-  default_browser_return_url: http://${EC2_IP}:5001/
+  default_browser_return_url:
   allowed_return_urls:
-    - http://${EC2_IP}:5001
-    - http://localhost:5001
 
   methods:
     password:
@@ -42,25 +40,27 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://${EC2_IP}:5001/auth/error
+      ui_url: # ${SELFSERVICE_FLOWS_ERROR_UI_URL}
     settings:
-      ui_url: http://${EC2_IP}:5001/auth/settings
+      ui_url: # ${SELFSERVICE_FLOWS_SETTINGS_UI_URL}
       privileged_session_max_age: 15m
     recovery:
       enabled: true
-      ui_url: http://${EC2_IP}:5001/auth/recovery
+      ui_url: # ${SELFSERVICE_FLOWS_RECOVERY_UI_URL}
     verification:
       enabled: true
-      ui_url: http://${EC2_IP}:5001/auth/verify
+      ui_url: # ${SELFSERVICE_FLOWS_VERFIICATION_UI_URL}
+      use: link
+      notify_unknown_recipients: false
     logout:
       after:
-        default_browser_return_url: http://${EC2_IP}:5001/auth/login
+        default_browser_return_url: # ${SELFSERVICE_FLOWS_LOGOUT_AFTER_DEFAULT_BROWSER_RETURN_URL}
     login:
-      ui_url: http://${EC2_IP}:5001/auth/login
+      ui_url: # ${SELFSERVICE_FLOWS_LOGIN_UI_URL}
       lifespan: 10m
     registration:
       lifespan: 10m
-      ui_url: http://${EC2_IP}:5001/auth/registration
+      ui_url: # ${SELFSERVICE_FLOWS_REGISTRATION_UI_URL}
       after:
         password:
           hooks:
@@ -72,11 +72,11 @@ log:
 
 secrets:
   default:
-    - ${KRATOS_SECRET}
+    # - ${SECRETS_DEFAULT}
   cookie:
-    - ${COOKIE_SECRET1}
+    # - ${SECRETS_COOKIE}
   cipher:
-    - ${COOKIE_SECRET2}
+    # - ${SECRETS_CIPHER}
 
 identity:
   default_schema_id: default
