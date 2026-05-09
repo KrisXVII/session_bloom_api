@@ -53,7 +53,7 @@ services:
       - SELFSERVICE_FLOWS_ERROR_UI_URL=http://${EC2_IP}:5001/auth/error
       - SELFSERVICE_FLOWS_SETTINGS_UI_URL=http://${EC2_IP}:5001/auth/settings
       - SELFSERVICE_FLOWS_RECOVERY_UI_URL=http://${EC2_IP}:5001/auth/recovery
-      - SELFSERVICE_FLOWS_VERFICATION_UI_URL=http://${EC2_IP}:5001/auth/verify
+      - SELFSERVICE_FLOWS_VERIFICATION_UI_URL=http://${EC2_IP}:5001/auth/verify
       - SELFSERVICE_FLOWS_LOGOUT_AFTER_DEFAULT_BROWSER_RETURN_URL=http://${EC2_IP}:5001/auth/login
       - SELFSERVICE_FLOWS_LOGIN_UI_URL=http://${EC2_IP}:5001/auth/login
       - SELFSERVICE_FLOWS_REGISTRATION_UI_URL=http://${EC2_IP}:5001/auth/registration

@@ -50,6 +50,8 @@ selfservice:
     verification:
       enabled: true
       ui_url: # ${SELFSERVICE_FLOWS_VERFIICATION_UI_URL}
+      use: link
+      notify_unknown_recipients: false
     logout:
       after:
         default_browser_return_url: # ${SELFSERVICE_FLOWS_LOGOUT_AFTER_DEFAULT_BROWSER_RETURN_URL}
