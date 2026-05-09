@@ -10,7 +10,7 @@ services:
       - "4444:4444" # Public API
       - "4445:4445" # Admin API
     environment:
-        - DSN=${KRATOS_URL}?sslmode=require
+        - DSN=${HYDRA_DB_URL}?sslmode=require
         - SECRETS_SYSTEM=${HYDRA_SECRET}
 
         - URLS_SELF_ISSUER=https://${EC2_IP}:4444
@@ -35,8 +35,6 @@ services:
       - "4433:4433"   # Public API
       - "4434:4434"   # Admin API
     environment:
-      - KRATOS_URL=${KRATOS_URL}
-      - EC2_IP=${EC2_IP}
 
       - DSN=${KRATOS_URL}?sslmode=require&max_conns=20
       - SECRETS_DEFAULT=${KRATOS_SECRETS_DEFAULT}
