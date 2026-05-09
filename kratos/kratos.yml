@@ -1,14 +1,14 @@
 version: v1.0.0
 
-dsn: ${KRATOS_DSN}
+dsn: # ${DSN}
 
 serve:
   public:
-    base_url: ${URLS_SELF_PUBLIC}
+    base_url: # ${SERVE_PUBLIC_BASE_URL}
     cors:
       enabled: true
       allowed_origins:
-        - ${URLS_DEFAULT_RETURN_TO}
+        # - ${SERVE_PUBLIC_CORS_ALLOWED_ORIGINS_0}
       allowed_methods:
         - POST
         - GET
@@ -23,13 +23,11 @@ serve:
         - Content-Type
         - Set-Cookie
   admin:
-    base_url: ${URLS_SELF_ADMIN}
+    base_url: # ${SERVE_ADMIN_BASE_URL}
 
 selfservice:
-  default_browser_return_url: ${URLS_DEFAULT_RETURN_TO}
+  default_browser_return_url:
   allowed_return_urls:
-    - ${URLS_DEFAULT_RETURN_TO}
-    - http://localhost:5001
 
   methods:
     password:
@@ -42,25 +40,25 @@ selfservice:
 
   flows:
     error:
-      ui_url: ${AUTH_ERROR_URL}
+      ui_url: # ${SELFSERVICE_FLOWS_ERROR_UI_URL}
     settings:
-      ui_url: ${AUTH_SETTINGS_URL}
+      ui_url: # ${SELFSERVICE_FLOWS_SETTINGS_UI_URL}
       privileged_session_max_age: 15m
     recovery:
       enabled: true
-      ui_url: ${AUTH_RECOVERY_URL}
+      ui_url: # ${SELFSERVICE_FLOWS_RECOVERY_UI_URL}
     verification:
       enabled: true
-      ui_url: ${AUTH_VERIFY_URL}
+      ui_url: # ${SELFSERVICE_FLOWS_VERFIICATION_UI_URL}
     logout:
       after:
-        default_browser_return_url: ${AUTH_LOGIN_URL}
+        default_browser_return_url: # ${SELFSERVICE_FLOWS_LOGOUT_AFTER_DEFAULT_BROWSER_RETURN_URL}
     login:
-      ui_url: ${AUTH_LOGIN_URL}
+      ui_url: # ${SELFSERVICE_FLOWS_LOGIN_UI_URL}
       lifespan: 10m
     registration:
       lifespan: 10m
-      ui_url: ${AUTH_REGISTRATION_URL}
+      ui_url: # ${SELFSERVICE_FLOWS_REGISTRATION_UI_URL}
       after:
         password:
           hooks:
@@ -72,11 +70,11 @@ log:
 
 secrets:
   default:
-    - ${SECRETS_DEFAULT}
+    # - ${SECRETS_DEFAULT}
   cookie:
-    - ${SECRETS_COOKIE}
+    # - ${SECRETS_COOKIE}
   cipher:
-    - ${SECRETS_CIPHER}
+    # - ${SECRETS_CIPHER}
 
 identity:
   default_schema_id: default

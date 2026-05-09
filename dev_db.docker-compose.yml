@@ -38,23 +38,25 @@ services:
       - KRATOS_URL=${KRATOS_URL}
       - EC2_IP=${EC2_IP}
 
-      - KRATOS_DSN=${KRATOS_URL}?sslmode=require&max_conns=20
-      - KRATOS_BASE_URL=http://${EC2_IP}:5001
+      - DSN=${KRATOS_URL}?sslmode=require&max_conns=20
       - SECRETS_DEFAULT=${KRATOS_SECRETS_DEFAULT}
       - SECRETS_COOKIE=${KRATOS_SECRETS_COOKIE}
       - SECRETS_CIPHER=${KRATOS_SECRETS_CIPHER}
       # Public URL
-      - URLS_SELF_PUBLIC=http://${EC2_IP}:4433
-      - URLS_SELF_ADMIN=http://kratos:4434
-      - AUTH_ERROR_URL=http://${EC2_IP}:5001/auth/error
-      - AUTH_SETTINGS_URL=http://${EC2_IP}:5001/auth/error
-      - AUTH_RECOVERY_URL=http://${EC2_IP}:5001/auth/recovery
-      - AUTH_VERIFY_URL=http://${EC2_IP}:5001/auth/verify
-      - AUTH_LOGIN_URL=http://${EC2_IP}:5001/auth/login
-      - AUTH_REGISTRATION_URL=http://${EC2_IP}:5001/auth/registration
-
-      # Where to redirect after login
-      - URLS_DEFAULT_RETURN_TO=http://${EC2_IP}:5001
+      - SERVE_PUBLIC_BASE_URL=http://${EC2_IP}:4433
+      - SERVE_PUBLIC_CORS_ALLOWED_ORIGINS_0=http://${EC2_IP}:5001
+    # - SERVE_PUBLIC_CORS_ALLOWED_ORIGINS_1=http://${EC2_IP}:5001
+      - SERVE_ADMIN_BASE_URL=http://kratos:4434
+      - SELFSERVICE_DEFAULT_BROWSER_RETURN_URL=http://${EC2_IP}:5001
+      - SELFSERVICE_ALLOWED_RETURN_URLS_0=http://${EC2_IP}:5001
+      - SELFSERVICE_ALLOWED_RETURN_URLS_1=http://localhost:5001
+      - SELFSERVICE_FLOWS_ERROR_UI_URL=http://${EC2_IP}:5001/auth/error
+      - SELFSERVICE_FLOWS_SETTINGS_UI_URL=http://${EC2_IP}:5001/auth/settings
+      - SELFSERVICE_FLOWS_RECOVERY_UI_URL=http://${EC2_IP}:5001/auth/recovery
+      - SELFSERVICE_FLOWS_VERFICATION_UI_URL=http://${EC2_IP}:5001/auth/verify
+      - SELFSERVICE_FLOWS_LOGOUT_AFTER_DEFAULT_BROWSER_RETURN_URL=http://${EC2_IP}:5001/auth/login
+      - SELFSERVICE_FLOWS_LOGIN_UI_URL=http://${EC2_IP}:5001/auth/login
+      - SELFSERVICE_FLOWS_REGISTRATION_UI_URL=http://${EC2_IP}:5001/auth/registration
 
       - LOG_LEVEL=debug
     volumes:
