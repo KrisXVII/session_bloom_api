@@ -36,7 +36,7 @@ services:
       - "4434:4434"   # Admin API
     environment:
 
-      - DSN=${KRATOS_URL}?sslmode=require&max_conns=20
+      - DSN=${KRATOS_DB_URL}?sslmode=require&max_conns=20
       - SECRETS_DEFAULT=${KRATOS_SECRETS_DEFAULT}
       - SECRETS_COOKIE=${KRATOS_SECRETS_COOKIE}
       - SECRETS_CIPHER=${KRATOS_SECRETS_CIPHER}
