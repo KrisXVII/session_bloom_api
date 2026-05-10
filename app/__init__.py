@@ -40,7 +40,7 @@ def create_app(config_name=None):
 
 	app.register_blueprint(user_bp, url_prefix='/users')
 	app.register_blueprint(session_bp, url_prefix='/sessions')
-	app.register_blueprint(registration_bp, url_prefix='/registrations')
+	app.register_blueprint(registration_bp, url_prefix='/auth')
 
 	@app.errorhandler(CustomError)
 	def handle_custom_error(e):
