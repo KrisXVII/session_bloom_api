@@ -54,6 +54,10 @@ class BaseModel(db.Model):
 		return record
 
 	@classmethod
+	def find_by(cls, **kwargs):
+		return cls.query.filter_by(**kwargs).first()
+
+	@classmethod
 	def create(cls, **kwargs):
 		new_instance = cls(**kwargs)
 		new_instance._save()
