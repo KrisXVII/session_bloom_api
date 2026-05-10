@@ -34,7 +34,7 @@
           "title": "Last Name"
         }
       },
-      "required": ["email", "first_name", "last_name", "username"],
+      "required": ["email", "first_name", "last_name"],
       "additionalProperties": true
     }
   }
