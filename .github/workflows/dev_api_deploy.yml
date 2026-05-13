@@ -16,10 +16,15 @@ jobs:
 #      - name: Pull latest changes
 #        run: git pull origin dev
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13'
+#      - name: Set up Python
+#        uses: actions/setup-python@v6
+#        with:
+#          python-version: '3.14.5'
+
+      - name: Verify Python
+        run: |
+          python3 --version
+          which python3
 
       - name: Install dependencies
         run: |
@@ -57,10 +62,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13'
+      - name: Verify Python
+        run: |
+          python3 --version
+          which python3
+
+#      - name: Set up Python
+#        uses: actions/setup-python@v6
+#        with:
+#          python-version: '3.14.5'
 
       - name: Install Python dependencies
         run: |
