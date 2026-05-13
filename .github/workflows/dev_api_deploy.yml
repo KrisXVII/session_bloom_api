@@ -105,6 +105,7 @@ jobs:
       - name: Run migrations
         run: |
           cd ${{ github.workspace }}
+          source venv/bin/activate
           export DATABASE_URL=${{ secrets.DATABASE_URL }}
           alembic upgrade head
 
