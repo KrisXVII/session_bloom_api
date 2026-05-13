@@ -26,16 +26,10 @@ jobs:
           python3 --version
           which python3
 
-      - name: Install pip
-        run: |
-          sudo apt update
-          sudo apt install -y python3-pip
-          pip3 --version
-
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install pytest pytest-cov
+          pip3 install -r requirements.txt
+          pip3 install pytest pytest-cov
 
       - name: Run tests
         env:
@@ -78,16 +72,10 @@ jobs:
 #        with:
 #          python-version: '3.14.5'
 
-      - name: Install pip
-        run: |
-          sudo apt update
-          sudo apt install -y python3-pip
-          pip3 --version
-
       - name: Install Python dependencies
         run: |
           cd ${{ github.workspace }}
-          pip install -r requirements.txt
+          pip3 install -r requirements.txt
 
       - name: Create .env from secrets
         run: |
