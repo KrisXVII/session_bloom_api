@@ -3,7 +3,7 @@ services:
 
   #redis: ...
 
-  db.sessionbloom.z:
+  postgre_dev:
     image: postgres:17-alpine
     container_name: sessionbloom_postgres_dev
     environment:
