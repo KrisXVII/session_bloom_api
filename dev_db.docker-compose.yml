@@ -25,7 +25,7 @@ services:
     networks:
       - ory_network
     extra_hosts:
-      - "db.sessionbloom.com:host-gateway"
+      - "db.sessionbloom.z:host-gateway"
       - "host.docker.internal:host-gateway"
     depends_on:
       - kratos_ory
@@ -67,7 +67,7 @@ services:
     networks:
       - ory_network
     extra_hosts:
-      - "db.sessionbloom.com:host-gateway"
+      - "db.sessionbloom.z:host-gateway"
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
 
@@ -87,7 +87,7 @@ services:
     networks:
       - ory_network
     extra_hosts:
-      - "db.sessionbloom.com:host-gateway"
+      - "db.sessionbloom.z:host-gateway"
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
 
