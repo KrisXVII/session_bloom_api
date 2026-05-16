@@ -7,8 +7,8 @@ services:
     image: oryd/hydra:v2.3.0
     container_name: ory_hydra
     ports:
-      - "4444:4444" # Public API
-      - "4445:4445" # Admin API
+      - "127.0.0.1:4444:4444" # Public API
+      - "127.0.0.1:4445:4445" # Admin API
     environment:
         - DSN=${HYDRA_DB_URL}
         - SECRETS_SYSTEM=${HYDRA_SECRET}
@@ -32,8 +32,8 @@ services:
     image: oryd/kratos:v1.3.0
     container_name: ory_kratos
     ports:
-      - "4433:4433"   # Public API
-      - "4434:4434"   # Admin API
+      - "127.0.0.1:4433:4433"   # Public API
+      - "127.0.0.1:4434:4434"   # Admin API
     environment:
 
       - DSN=${KRATOS_DB_URL}
