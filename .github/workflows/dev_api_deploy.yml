@@ -106,7 +106,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           source venv/bin/activate
-          export DATABASE_URL=${{ secrets.DATABASE_URL }}
+          export DATABASE_URL=${{ secrets.DATABASE_URL_ACTIONS }}
           alembic upgrade head
 
       - name: Rebuild and restart containers
