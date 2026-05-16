@@ -25,7 +25,7 @@ services:
     networks:
       - ory_network
     extra_hosts:
-      - "${DB_DOMAIN}:172.17.0.1"
+      - "db.sessionbloom.z:172.17.0.1"
     depends_on:
       - kratos_ory
     restart: unless-stopped
@@ -64,7 +64,7 @@ services:
       - ./kratos:/etc/config/kratos
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
     extra_hosts:
-      - "${DB_DOMAIN}:172.17.0.1"
+      - "db.sessionbloom.z:172.17.0.1"
     networks:
       - ory_network
     restart: unless-stopped
@@ -83,7 +83,7 @@ services:
       - FLASK_RUN_HOST=0.0.0.0
       - FLASK_RUN_PORT=5000
     extra_hosts:
-      - "${DB_DOMAIN}:172.17.0.1"
+      - "db.sessionbloom.z:172.17.0.1"
     networks:
       - ory_network
     restart: unless-stopped
