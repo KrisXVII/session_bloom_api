@@ -94,7 +94,7 @@ jobs:
           FLASK_ENV=${{ secrets.FLASK_ENV }}
           KRATOS_DB_URL=${{ secrets.KRATOS_DB_URL }}
           HYDRA_DB_URL=${{ secrets.HYDRA_DB_URL }}
-          MACHINE_IP=${{ secrets.MACHINE_IP }}
+          API_DOMAIN=${{ secrets.API_DOMAIN }}
           HYDRA_SECRET=${{ secrets.HYDRA_SECRET }}
           HYDRA_OIDC_SALT=${{ secrets.HYDRA_OIDC_SALT }}
           KRATOS_SECRETS_DEFAULT=${{ secrets.KRATOS_SECRETS_DEFAULT }}
@@ -106,7 +106,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           source venv/bin/activate
-          export DATABASE_URL=${{ secrets.DATABASE_URL }}
+          export DATABASE_URL=${{ secrets.DATABASE_URL_ACTIONS }}
           alembic upgrade head
 
       - name: Rebuild and restart containers
