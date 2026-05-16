@@ -3,6 +3,20 @@ services:
 
   #redis: ...
 
+  db.sessionbloom.z:
+    image: postgres:17-alpine
+    container_name: sessionbloom_postgres_dev
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    networks:
+      - ory_network
+    restart: unless-stopped
+
   hydra_ory:
     image: oryd/hydra:v2.3.0
     container_name: ory_hydra
@@ -24,8 +38,6 @@ services:
     command: serve all  # Run both public and admin APIs
     networks:
       - ory_network
-    extra_hosts:
-      - "db.sessionbloom.z:172.18.0.1"
     depends_on:
       - kratos_ory
     restart: unless-stopped
@@ -63,8 +75,6 @@ services:
       # Mount configuration files
       - ./kratos:/etc/config/kratos
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
-    extra_hosts:
-      - "db.sessionbloom.z:172.18.0.1"
     networks:
       - ory_network
     restart: unless-stopped
@@ -82,8 +92,6 @@ services:
       - FLASK_ENV=${FLASK_ENV}
       - FLASK_RUN_HOST=0.0.0.0
       - FLASK_RUN_PORT=5000
-    extra_hosts:
-      - "db.sessionbloom.z:172.18.0.1"
     networks:
       - ory_network
     restart: unless-stopped
@@ -91,3 +99,6 @@ services:
 networks:
   ory_network:
     driver: bridge
+
+volumes:
+  postgres_data_dev:
