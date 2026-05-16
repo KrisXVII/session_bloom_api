@@ -7,8 +7,8 @@ services:
     image: oryd/hydra:v2.3.0
     container_name: ory_hydra
     ports:
-      - "127.0.0.1:4444:4444" # Public API
-      - "127.0.0.1:4445:4445" # Admin API
+      - "4444:4444" # Public API
+      - "4445:4445" # Admin API
     environment:
         - DSN=${HYDRA_DB_URL}
         - SECRETS_SYSTEM=${HYDRA_SECRET}
@@ -32,11 +32,11 @@ services:
     image: oryd/kratos:v1.3.0
     container_name: ory_kratos
     ports:
-      - "127.0.0.1:4433:4433"   # Public API
-      - "127.0.0.1:4434:4434"   # Admin API
+      - "4433:4433"   # Public API
+      - "4434:4434"   # Admin API
     environment:
 
-      - DSN=${KRATOS_DB_URL}?&max_conns=20
+      - DSN=${KRATOS_DB_URL}
       - SECRETS_DEFAULT=${KRATOS_SECRETS_DEFAULT}
       - SECRETS_COOKIE=${KRATOS_SECRETS_COOKIE}
       - SECRETS_CIPHER=${KRATOS_SECRETS_CIPHER}
@@ -70,7 +70,8 @@ services:
     build: .
     container_name: dev_python_api
     ports:
-      - "127.0.0.1:5001:5000" # In container 5000, from local machine (Pi) 5001 as address
+      - "5001:5000" # In container 5000, from local machine (Pi) 5001 as address
+#      - "127.0.0.1:5001:5000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - FLASK_APP=app:create_app
