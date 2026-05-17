@@ -44,6 +44,7 @@ class KratosAPI:
 				f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
 				timeout=5
 			)
+			
 
 			if response.status_code == 200:
 				return response.json()
