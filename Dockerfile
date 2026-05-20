@@ -4,7 +4,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN groupadd --system appgroup && \ useradd --system --gid appgroup --no-create-home appuser
+RUN groupadd --system appgroup && useradd --system --gid appgroup --no-create-home appuser
 
 USER appuser
 
