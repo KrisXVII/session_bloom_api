@@ -77,3 +77,6 @@ coverage.xml
 *.pid
 
 local_db.docker-compose.yml
+
+*.pem
+*-key.pem

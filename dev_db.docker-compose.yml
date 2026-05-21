@@ -3,6 +3,18 @@ services:
 
   #redis: ...
 
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    ports:
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ~/certs:/certs:ro # readonly
+    networks:
+      - ory_network
+    restart: unless-stopped
+
   hydra_ory:
     image: oryd/hydra:v2.3.0
     container_name: ory_hydra
@@ -75,8 +87,8 @@ services:
 
     build: .
     container_name: dev_python_api
-    ports:
-      - "5001:5000" # In container 5000, from local machine (Pi) 5001 as address
+#    ports: # Internal only because of Caddy
+#      - "5001:5000" # In container 5000, from local machine (Pi) 5001 as address
 #      - "127.0.0.1:5001:5000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
