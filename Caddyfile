@@ -1,5 +1,5 @@
 api.sessionbloom.z {
-    tls /certs/api.sessionbloom.z.pem /certs/api.sessiobloom.z-key.pem
+    tls /certs/api.sessionbloom.z.pem /certs/api.sessionbloom.z-key.pem
 
     reverse_proxy backend_dev:5000
 }
