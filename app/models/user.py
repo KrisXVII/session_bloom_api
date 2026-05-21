@@ -13,6 +13,7 @@ class User(BaseModel):
 	# 1 to many, a User can have many sessions
 	id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 	code = db.Column(db.String(20), unique=True, nullable=False)
+	kratos_id = db.Column(db.String(36), unique=True, nullable=False)
 	first_name = db.Column(db.String(50), nullable=False)
 	last_name = db.Column(db.String(50), nullable=False)
 	status = db.Column(SQLEnum(UserStatus), nullable=False)
