@@ -20,7 +20,7 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
 	last_name = factory.LazyAttribute(lambda _: fake.last_name())
 	email = factory.LazyAttribute(lambda _: fake.email())
 	status = factory.LazyAttribute(lambda _: random.choice(list(UserStatus)))
-	kratos_id = factory.LazyAttribute(lambda: str(uuid.uuid4()))
+	kratos_id = factory.LazyAttribute(lambda _: str(uuid.uuid4()))
 	created_at = factory.LazyAttribute(lambda _: datetime.now(timezone.utc))
 	updated_at = factory.LazyAttribute(lambda _: datetime.now(timezone.utc))
 

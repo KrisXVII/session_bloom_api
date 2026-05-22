@@ -27,7 +27,6 @@ class TestRegistrationController:
 			}
 
 			response = client.post('/auth/sign_up', json=data)
-			ap(response.json)
 			assert_valid_schema(response.json, UserSchema)
 
 			assert response.json['first_name'] == data["first_name"]
