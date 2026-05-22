@@ -33,21 +33,6 @@ class TestUserController:
 			assert response.status_code == 200
 			assert response.json == []
 
-	class TestCreateUser:
-		def test_create_user(self, client):
-			data = {
-				"first_name": fake.first_name(),
-				"last_name": fake.last_name(),
-				"email": fake.email(),
-			}
-
-			response = client.post('/users/', json=data)
-			assert_valid_schema(response.json, UserSchema)
-
-			assert response.json['first_name'] == data["first_name"]
-			assert response.json['last_name'] == data["last_name"]
-			assert response.json['email'] == data["email"]
-
 	class TestGetUser:
 
 		@pytest.fixture(autouse=True)

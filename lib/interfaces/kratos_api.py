@@ -1,6 +1,7 @@
 import requests
 from flask import current_app
 from app.utils.custom_error import CustomError
+from app import ap
 
 KRATOS_ADMIN_URL = "http://kratos_ory:4434"
 

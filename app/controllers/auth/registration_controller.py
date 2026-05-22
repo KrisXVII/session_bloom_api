@@ -3,8 +3,9 @@ from app import ap
 from params_schemas.auth_schemas.signup_schemas import *
 from lib.interfaces.kratos_api import KratosAPI
 from marshmallow import ValidationError
-from app.models.user import User
+from app.models.user import User, UserStatus
 from app.utils.custom_error import CustomError
+from app.serializers.user_serializer import UserSerializer
 
 registration_bp = Blueprint("registration", __name__)
 
@@ -27,8 +28,14 @@ def sign_up():
 		password=params["password"]
 	)
 
-	return kratos_identity
+	del params["password"]
 
+	user = User.create(
+		kratos_id=kratos_identity["id"],
+		status=UserStatus.ACTIVE,
+	    **params
+	)
+	return UserSerializer.render(user)
 
 
 def _set_signup_params(schema_class):
