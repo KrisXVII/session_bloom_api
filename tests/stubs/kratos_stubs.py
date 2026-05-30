@@ -21,3 +21,15 @@ class KratosStubs:
 			json=response_json,
 			status=201
 		)
+
+	@classmethod
+	def patch_identity(cls, identity_id):
+		with open(os.path.join(JSON_DIR, "identity_updated.json"), "r", encoding="utf-8") as f:
+			response_json = json.load(f)
+
+		responses.add(
+			responses.PATCH,
+			f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
+			json=response_json,
+			status=201
+		)

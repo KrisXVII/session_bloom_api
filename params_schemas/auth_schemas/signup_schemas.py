@@ -1,16 +1,20 @@
-from marshmallow import Schema, fields, validate, validates, ValidationError
-import re
+from marshmallow import Schema, fields, validate, EXCLUDE
 
-class SignupSchema(Schema):
+def validate_password(value):
+	if not any(c.isupper() for c in value):
+		raise validate.ValidationError("Password must contain uppercase")
+	if not any(c.isdigit() for c in value):
+		raise validate.ValidationError("Password must contain a number")
+
+class IdentitySchema(Schema):
+	class Meta:
+		unknown = EXCLUDE
+
 	first_name = fields.Str(required=True, validate=validate.Length(min=1, max=50))
 	last_name = fields.Str(required=True, validate=validate.Length(min=1, max=50))
 	email = fields.Email(required=True)
-	password = fields.Str(required=True, validate=validate.Length(min=8))
-
-	# password = fields.Str(required=True)
-	# @validates('password')
-	# def validate_password(self, value):
-	# 	if not re.search(r'\d', value):
-	# 		raise ValidationError('La password deve contenere almeno un numero')
-	# 	if not re.search(r'[A-Z]', value):
-	# 		raise ValidationError('La password deve contenere almeno una maiuscola')
+	password = fields.Str(
+		required=True,
+		validate=[validate.Length(min=8), validate_password],
+		load_only=True
+	)
