@@ -11,7 +11,8 @@ registration_bp = Blueprint("registration", __name__)
 
 @registration_bp.route("/sign_up", methods=["POST"])
 def sign_up():
-	params = _set_signup_params(SignupSchema)
+	params = _set_params(IdentitySchema)
+	password = params.pop("password")
 	existing = User.find_by(email=params["email"])
 
 	if existing:
@@ -22,8 +23,8 @@ def sign_up():
 		)
 
 	kratos_identity = KratosAPI.create_identity(
-		first_name = params["first_name"],
-		last_name = params["last_name"],
+		password=password,
+		**params
 		email=params["email"],
 		password=params["password"]
 	)
@@ -39,7 +40,12 @@ def sign_up():
 
 
 def _set_signup_params(schema_class):
+
+def _set_params(schema_class, partial=False):
+	data = request.get_json()
+	if not data:
+		raise CustomError("Bad request", 400, "No data provided")
 	try:
-		return schema_class().load(request.get_json())
+		return schema_class(partial=partial).load(data)
 	except ValidationError as err:
 		raise CustomError("Validation error", 400, err.messages)
