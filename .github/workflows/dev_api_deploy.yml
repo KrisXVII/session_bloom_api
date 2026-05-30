@@ -92,6 +92,7 @@ jobs:
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           FLASK_ENV=${{ secrets.FLASK_ENV }}
+          DB_HOST=${{secrets.DB_HOST}}
           KRATOS_DB_URL=${{ secrets.KRATOS_DB_URL }}
           HYDRA_DB_URL=${{ secrets.HYDRA_DB_URL }}
           API_DOMAIN=${{ secrets.API_DOMAIN }}
