@@ -50,6 +50,25 @@ class KratosAPI:
 				return response.json()
 			return None
 
+		except requests.RequestException as e:
+			raise CustomError(
+
+			)
+
+	@classmethod
+	def update_identity(cls, identity_id, update_params):
+		data = cls._format_params_tolist(update_params)
+		try:
+			response = requests.patch(
+				f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
+				json=data,
+				timeout=5
+			)
+
+			if response.status_code == 200:
+				return response.json()
+			return None
+
 		except requests.RequestException:
 			return None
 
@@ -72,3 +91,14 @@ class KratosAPI:
 		}
 
 		return payload
+
+	@staticmethod
+	def _format_params_tolist(params):
+		patch_data = [
+			{
+				"op": "replace",
+				"path": f"/traits/{key}",
+				"value": value
+			} for key, value in params.items()
+		]
+		return patch_data
