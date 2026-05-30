@@ -51,8 +51,11 @@ class KratosAPI:
 			return None
 
 		except requests.RequestException as e:
+			current_app.logger.error(f"Kratos connection failed: {e}")
 			raise CustomError(
-
+				message="Auth service unavailable",
+				code=503,
+				details="Unable to reach authentication service"
 			)
 
 	@classmethod
@@ -69,8 +72,13 @@ class KratosAPI:
 				return response.json()
 			return None
 
-		except requests.RequestException:
-			return None
+		except requests.RequestException as e:
+			current_app.logger.error(f"Kratos connection failed: {e}")
+			raise CustomError(
+				message="Auth service unavailable",
+				code=503,
+				details="Unable to reach authentication service"
+			)
 
 	@staticmethod
 	def _build_payload(first_name, last_name, email, password):

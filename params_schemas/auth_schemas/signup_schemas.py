@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validate
+from marshmallow import Schema, fields, validate, EXCLUDE
 
 def validate_password(value):
 	if not any(c.isupper() for c in value):
@@ -7,6 +7,8 @@ def validate_password(value):
 		raise validate.ValidationError("Password must contain a number")
 
 class IdentitySchema(Schema):
+	class Meta:
+		unknown = EXCLUDE
 
 	first_name = fields.Str(required=True, validate=validate.Length(min=1, max=50))
 	last_name = fields.Str(required=True, validate=validate.Length(min=1, max=50))
