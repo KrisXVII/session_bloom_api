@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app
+from flask import Blueprint, request
 from app import ap
 from params_schemas.auth_schemas.signup_schemas import *
 from lib.interfaces.kratos_api import KratosAPI
@@ -44,8 +44,7 @@ def update_identity(user_id):
 	kratos_id = user.kratos_id
 	params = _set_params(IdentitySchema, partial=True)
 	params.pop("password", None) # defense in depth on altered payloads, unknown = EXCLUDE is first layer
-	a = KratosAPI.update_identity(kratos_id, params)
-	current_app.logger.error(a)
+	KratosAPI.update_identity(kratos_id, params)
 	user.update(**params)
 	return UserSerializer.render(user)
 
