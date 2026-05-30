@@ -36,21 +36,22 @@ class TestRegistrationController:
 			assert response.json['email'] == data["email"]
 			assert response.json["kratos_id"] is not None
 
-	# class TestUpdateUser:
-	#
-	# 	@focus
-	# 	@responses.activate
-	# 	def test_patch_identity(self, client):
-	# 		user = UserFactory.create()
-	# 		data = {
-	# 			"first_name": fake.first_name(),
-	# 			"last_name": fake.last_name(),
-	# 			"email": fake.email(),
-	# 			# "password": fake.password(length=12)
-	# 		}
-	#
-	# 		KratosStubs.patch_identity(user.kratos_id)
-	#
-	# 		response = client.patch(f"/auth/{user.id}", json=data)
-	# 		ap(response.json)
-	# 		assert_valid_schema(response.json, UserSchema)
+	class TestUpdateUser:
+
+		@responses.activate
+		def test_patch_identity(self, client):
+			user = UserFactory.create()
+			data = {
+				"first_name": fake.first_name(),
+				"last_name": fake.last_name(),
+				"email": fake.email()
+			}
+
+			KratosStubs.patch_identity(user.kratos_id)
+
+			response = client.patch(f"/auth/{user.id}", json=data)
+
+			assert_valid_schema(response.json, UserSchema)
+			assert response.json['first_name'] == data["first_name"]
+			assert response.json['last_name'] == data["last_name"]
+			assert response.json['email'] == data["email"]
