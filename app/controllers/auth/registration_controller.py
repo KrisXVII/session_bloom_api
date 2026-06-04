@@ -51,6 +51,7 @@ def update_identity(user_id):
 
 def _set_params(schema_class, partial=False):
 	data = request.get_json()
+	print(data)
 	if not data:
 		raise CustomError("Bad request", 400, "No data provided")
 	try:
