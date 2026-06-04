@@ -6,6 +6,7 @@ from marshmallow import ValidationError
 from app.models.user import User, UserStatus
 from app.utils.custom_error import CustomError
 from app.serializers.user_serializer import UserSerializer
+from flask import current_app
 
 registration_bp = Blueprint("registration", __name__)
 
@@ -51,7 +52,7 @@ def update_identity(user_id):
 
 def _set_params(schema_class, partial=False):
 	data = request.get_json()
-	print(data)
+	current_app.logger.info(data)
 	if not data:
 		raise CustomError("Bad request", 400, "No data provided")
 	try:
