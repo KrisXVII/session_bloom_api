@@ -1,10 +1,10 @@
-from marshmallow import Schema, fields, validate, EXCLUDE
+from marshmallow import Schema, fields, validate, EXCLUDE, ValidationError
 
 def validate_password(value):
 	if not any(c.isupper() for c in value):
-		raise validate.ValidationError("Password must contain uppercase")
+		raise ValidationError("Password must contain uppercase")
 	if not any(c.isdigit() for c in value):
-		raise validate.ValidationError("Password must contain a number")
+		raise ValidationError("Password must contain a number")
 
 class IdentitySchema(Schema):
 	class Meta:
