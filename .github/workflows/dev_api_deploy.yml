@@ -101,6 +101,7 @@ jobs:
           KRATOS_SECRETS_DEFAULT=${{ secrets.KRATOS_SECRETS_DEFAULT }}
           KRATOS_SECRETS_COOKIE=${{ secrets.KRATOS_SECRETS_COOKIE }}
           KRATOS_SECRETS_CIPHER=${{ secrets.KRATOS_SECRETS_CIPHER }}
+          RESEND_TOKEN=${{secrets.RESEND_TOKEN}}
           EOF
 
       - name: Run migrations

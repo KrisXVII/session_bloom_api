@@ -70,6 +70,8 @@ services:
       - SELFSERVICE_FLOWS_LOGOUT_AFTER_DEFAULT_BROWSER_RETURN_URL=http://${API_DOMAIN}:5001/auth/login
       - SELFSERVICE_FLOWS_LOGIN_UI_URL=http://${API_DOMAIN}:5001/auth/login
       - SELFSERVICE_FLOWS_REGISTRATION_UI_URL=http://${API_DOMAIN}:5001/auth/registration
+      - COURIER_SMTP_CONNECTION_URI=smtps://resend:${RESEND_TOKEN}@smtp.resend.com:465/
+
 
       - LOG_LEVEL=debug
     volumes:
