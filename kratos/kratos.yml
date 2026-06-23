@@ -81,6 +81,6 @@ identity:
 
 courier:
   smtp:
-#    COURIER_SMTP_CONNECTION_URI
+    connection_uri: # COURIER_SMTP_CONNECTION_URI
     from_address: onboarding@resend.dev
     from_name: SessionBloom
