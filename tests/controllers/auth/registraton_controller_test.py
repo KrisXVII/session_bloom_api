@@ -5,7 +5,6 @@ from tests.factories.user_factory import UserFactory
 from tests.helpers import *
 from tests.schemas.user_schema import UserSchema
 from tests.schemas.error_schemas import *
-from app.models.user import User
 from tests.conftest import focus
 import responses
 from app import ap

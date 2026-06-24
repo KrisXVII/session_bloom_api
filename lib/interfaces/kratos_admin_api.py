@@ -5,7 +5,7 @@ from app import ap
 
 KRATOS_ADMIN_URL = "http://kratos_ory:4434"
 
-class KratosAPI:
+class KratosAdminAPI:
 
 	@classmethod
 	def create_identity(cls, first_name, last_name, email, password):
@@ -36,7 +36,6 @@ class KratosAPI:
 				code=503,
 				details="Unable to reach authentication service"
 			)
-
 
 	@classmethod
 	def get_identity(cls, identity_id):
@@ -79,6 +78,28 @@ class KratosAPI:
 				code=503,
 				details="Unable to reach authentication service"
 			)
+
+	@classmethod
+	def update_password(cls, identity_id, update_params):
+		data = cls._build_payload(update_params)
+		try:
+			response = requests.put(
+				f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
+				json=data,
+				timeout=5
+			)
+			if response.status_code == 200:
+				return response.json()
+			return None
+
+		except requests.RequestException as e:
+			current_app.logger.error(f"Kratos connection failed: {e}")
+			raise CustomError(
+				message="Auth service unavailable",
+				code=503,
+				details="Unable to reach authentication service"
+			)
+
 
 	@staticmethod
 	def _build_payload(first_name, last_name, email, password):

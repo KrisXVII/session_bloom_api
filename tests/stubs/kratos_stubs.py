@@ -1,5 +1,5 @@
 import responses
-from lib.interfaces.kratos_api import KRATOS_ADMIN_URL
+from lib.interfaces.kratos_admin_api import KRATOS_ADMIN_URL
 import json
 import os
 from app import ap
@@ -31,5 +31,5 @@ class KratosStubs:
 			responses.PATCH,
 			f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
 			json=response_json,
-			status=201
+			status=200
 		)
