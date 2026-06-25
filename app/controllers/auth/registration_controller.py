@@ -39,7 +39,7 @@ def sign_up():
 
 @registration_bp.route("/auth_flow", methods=["GET"])
 def create_auth_flow():
-	return KratosPublicAPI.start_verification_flow()
+	return KratosPublicAPI.start_verification_flow()["id"]
 
 @registration_bp.route("/send_verification_code", methods=["POST"])
 def send_code():
