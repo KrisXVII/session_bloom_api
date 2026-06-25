@@ -52,9 +52,9 @@ def send_code():
 @registration_bp.route("/validate_verification_code", methods=["POST"])
 def validate_code():
 	params = request.get_json()
-	return KratosPublicAPI.send_verification_code(
+	return KratosPublicAPI.verify_code(
 		params["flow_id"],
-		params["code"]
+		params["code"],
 	)
 
 @registration_bp.route("/<user_id>", methods=["PATCH"])
