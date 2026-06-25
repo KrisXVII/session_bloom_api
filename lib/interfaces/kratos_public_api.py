@@ -12,6 +12,8 @@ class KratosPublicAPI:
 		try:
 			response = requests.get(
 				f"{KRATOS_PUBLIC_URL}/self-service/verification/api",
+				headers={"Accept": "application/json"},
+				allow_redirects=False,
 				timeout=10
 			)
 
@@ -42,6 +44,8 @@ class KratosPublicAPI:
 					"method": "code",
 					"email": email
 				},
+				headers={"Accept": "application/json"},
+				allow_redirects=False,
 				timeout=10
 			)
 
@@ -51,14 +55,14 @@ class KratosPublicAPI:
 				error = response.json()
 				current_app.logger.error(f"Kratos error: {error}")
 				raise CustomError(
-					message="Auth flow creation failed",
+					message="Code issuing failed",
 					code=400,
 					details=error.get('message', 'Unknown error from auth service')
 				)
 		except requests.RequestException as e:
 			current_app.logger.error(f"Kratos connection failed: {e}")
 			raise CustomError(
-				message="Auth service unavailable",
+				message=e,
 				code=503,
 				details="Unable to reach authentication service"
 			)
@@ -72,6 +76,8 @@ class KratosPublicAPI:
 					"method": "code",
 					"code": code
 				},
+				headers={"Accept": "application/json"},
+				allow_redirects=False,
 				timeout=10
 			)
 
@@ -81,14 +87,14 @@ class KratosPublicAPI:
 				error = response.json()
 				current_app.logger.error(f"Kratos error: {error}")
 				raise CustomError(
-					message="Auth flow creation failed",
+					message="Code verification failed",
 					code=400,
 					details=error.get('message', 'Unknown error from auth service')
 				)
 		except requests.RequestException as e:
 			current_app.logger.error(f"Kratos connection failed: {e}")
 			raise CustomError(
-				message="Auth service unavailable",
+				message=e,
 				code=503,
 				details="Unable to reach authentication service"
 			)
