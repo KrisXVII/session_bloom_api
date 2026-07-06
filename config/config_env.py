@@ -7,6 +7,8 @@ class Config:
 	"""Base configuration"""
 	# SECRET_KEY = os.getenv('SECRET_KEY', 'dev-key')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
+	KRATOS_ADMIN_URL = os.environ['KRATOS_ADMIN_URL']
+	KRATOS_PUBLIC_URL = os.environ['KRATOS_PUBLIC_URL']
 
 class DevelopmentConfig(Config):
 	"""Development configuration"""

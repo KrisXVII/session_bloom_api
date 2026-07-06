@@ -36,6 +36,8 @@ jobs:
       - name: Run tests
         env:
           FLASK_ENV: test
+          KRATOS_ADMIN_URL: ${{secrets.KRATOS_ADMIN_URL}}
+          KRATOS_PUBLIC_URL: ${{secrets.KRATOS_PUBLIC_URL}}
         run: |
           source venv/bin/activate
           pytest
@@ -102,6 +104,8 @@ jobs:
           KRATOS_SECRETS_COOKIE=${{ secrets.KRATOS_SECRETS_COOKIE }}
           KRATOS_SECRETS_CIPHER=${{ secrets.KRATOS_SECRETS_CIPHER }}
           RESEND_TOKEN=${{secrets.RESEND_TOKEN}}
+          KRATOS_ADMIN_URL=${{secrets.KRATOS_ADMIN_URL}}
+          KRATOS_PUBLIC_URL=${{secrets.KRATOS_PUBLIC_URL}}
           EOF
 
       - name: Run migrations

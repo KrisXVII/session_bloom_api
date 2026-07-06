@@ -1,9 +1,8 @@
-import requests
-from flask import current_app
-from app.utils.custom_error import CustomError
+from lib.api_client import ApiClient
+from config.config_env import Config
 from app import ap
 
-KRATOS_ADMIN_URL = "http://kratos_ory:4434"
+KRATOS_ADMIN = ApiClient(Config.KRATOS_ADMIN_URL)
 
 class KratosAdminAPI:
 
@@ -12,94 +11,58 @@ class KratosAdminAPI:
 
 		data = cls._build_payload(first_name, last_name, email, password)
 
-		try:
-			response = requests.post(
-				f"{KRATOS_ADMIN_URL}/admin/identities",
-				json=data,
-				timeout=10
-			)
-
-			if response.status_code == 201:
-				return response.json()
-			else:
-				error = response.json()
-				current_app.logger.error(f"Kratos error: {error}")
-				raise CustomError(
-					message="Registration failed",
-					code=400,
-					details=error.get('message', 'Unknown error from auth service')
-				)
-		except requests.RequestException as e:
-			current_app.logger.error(f"Kratos connection failed: {e}")
-			raise CustomError(
-				message="Auth service unavailable",
-				code=503,
-				details="Unable to reach authentication service"
-			)
+		response = KRATOS_ADMIN.post(
+			"/admin/identities",
+			json=data,
+			expected=(201,),
+			error_message="Registration failed"
+		)
+		return response.json()
 
 	@classmethod
 	def get_identity(cls, identity_id):
-		try:
-			response = requests.get(
-				f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
-				timeout=5
-			)
 
-			if response.status_code == 200:
-				return response.json()
-			return None
+		response = KRATOS_ADMIN.get(
+			f"/admin/identities/{identity_id}",
+			expected=(200,),
+			error_message="Auth service unavailable."
+		)
 
-		except requests.RequestException as e:
-			current_app.logger.error(f"Kratos connection failed: {e}")
-			raise CustomError(
-				message="Auth service unavailable",
-				code=503,
-				details="Unable to reach authentication service"
-			)
+		return response.json()
 
 	@classmethod
 	def update_identity(cls, identity_id, update_params):
 		data = cls._format_params_tolist(update_params)
-		try:
-			response = requests.patch(
-				f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
-				json=data,
-				timeout=5
-			)
 
-			if response.status_code == 200:
-				return response.json()
-			return None
+		response = KRATOS_ADMIN.patch(
+			f"/admin/identities/{identity_id}",
+			json=data,
+			expected=(200,),
+			error_message="Auth service unavailable."
+		)
 
-		except requests.RequestException as e:
-			current_app.logger.error(f"Kratos connection failed: {e}")
-			raise CustomError(
-				message="Auth service unavailable",
-				code=503,
-				details="Unable to reach authentication service"
-			)
+		return response.json()
 
-	@classmethod
-	def update_password(cls, identity_id, update_params):
-		data = cls._build_payload(update_params)
-		try:
-			response = requests.put(
-				f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
-				json=data,
-				timeout=5
-			)
-			if response.status_code == 200:
-				return response.json()
-			return None
-
-		except requests.RequestException as e:
-			current_app.logger.error(f"Kratos connection failed: {e}")
-			raise CustomError(
-				message="Auth service unavailable",
-				code=503,
-				details="Unable to reach authentication service"
-			)
-
+	# @classmethod
+	# def update_password(cls, identity_id, update_params):
+	# 	data = cls._build_payload(update_params)
+	# 	try:
+	# 		response = requests.put(
+	# 			f"{KRATOS_ADMIN_URL}/admin/identities/{identity_id}",
+	# 			json=data,
+	# 			timeout=5
+	# 		)
+	# 		if response.status_code == 200:
+	# 			return response.json()
+	# 		return None
+	#
+	# 	except requests.RequestException as e:
+	# 		current_app.logger.error(f"Kratos connection failed: {e}")
+	# 		raise CustomError(
+	# 			message="Auth service unavailable",
+	# 			code=503,
+	# 			details="Unable to reach authentication service"
+	# 		)
 
 	@staticmethod
 	def _build_payload(first_name, last_name, email, password):

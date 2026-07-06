@@ -72,6 +72,9 @@ services:
       - SELFSERVICE_FLOWS_REGISTRATION_UI_URL=http://${API_DOMAIN}:5001/auth/registration
       - COURIER_SMTP_CONNECTION_URI=smtps://resend:${RESEND_TOKEN}@smtp.resend.com:465/
 
+      - KRATOS_ADMIN_URL=${KRATOS_ADMIN_URL}
+      - KRATOS_PUBLIC_URL=${KRATOS_PUBLIC_URL}
+
 
       - LOG_LEVEL=debug
     volumes:
