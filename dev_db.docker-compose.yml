@@ -104,8 +104,6 @@ services:
       - FLASK_DEBUG=1
     networks:
       - ory_network
-    volumes:
-      - .:/app
     extra_hosts:
       - "db.sessionbloom.z:host-gateway"
       - "host.docker.internal:host-gateway"
