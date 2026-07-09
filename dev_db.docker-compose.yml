@@ -103,6 +103,8 @@ services:
       - FLASK_RUN_PORT=5000
     networks:
       - ory_network
+    volumes:
+      - .:/app
     extra_hosts:
       - "db.sessionbloom.z:host-gateway"
       - "host.docker.internal:host-gateway"
