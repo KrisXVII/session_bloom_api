@@ -1,7 +1,8 @@
-
 import db.utils.id_generator
 from db.base import db
 from datetime import datetime, timezone
+from sqlalchemy import and_, or_, select
+from sqlalchemy.sql import operators
 from app import ap
 from app.utils.custom_error import CustomError
 import uuid
@@ -53,6 +54,10 @@ class BaseModel(db.Model):
 		return record
 
 	@classmethod
+	def find_by(cls, **kwargs):
+		return cls.query.filter_by(**kwargs).first()
+
+	@classmethod
 	def create(cls, **kwargs):
 		new_instance = cls(**kwargs)
 		new_instance._save()
@@ -68,6 +73,26 @@ class BaseModel(db.Model):
 	def delete(self):
 		db.session.delete(self)
 		db.session.commit()
+
+	@classmethod
+	def where(cls, *conditions, **filters):
+		query = select(cls)
+
+		if filters:
+			filter_conditions = []
+			for key, value in filters.items():
+				if '__' in key:
+					field_name, op = key.split('__')
+					column = getattr(cls, field_name)
+					filter_conditions.append(cls._apply_operator(column, op, value))
+				else:
+					filter_conditions.append(getattr(cls, key) == value)
+
+			query = query.where(and_(*filter_conditions))
+			if conditions:
+				query = query.where(and_(*conditions))
+
+		return db.session.execute(query).scalars()
 
 	def to_dict(self):
 		result = {}

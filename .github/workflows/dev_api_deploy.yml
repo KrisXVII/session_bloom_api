@@ -16,20 +16,31 @@ jobs:
 #      - name: Pull latest changes
 #        run: git pull origin dev
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13.9'
+#      - name: Set up Python
+#        uses: actions/setup-python@v6
+#        with:
+#          python-version: '3.14.5'
+
+      - name: Verify Python
+        run: |
+          python3 --version
+          which python3
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install pytest pytest-cov
+          python3 -m venv venv
+          source venv/bin/activate
+          pip3 install -r requirements.txt
+          pip3 install pytest pytest-cov
 
       - name: Run tests
         env:
           FLASK_ENV: test
-        run: pytest
+          KRATOS_ADMIN_URL: ${{secrets.KRATOS_ADMIN_URL}}
+          KRATOS_PUBLIC_URL: ${{secrets.KRATOS_PUBLIC_URL}}
+        run: |
+          source venv/bin/activate
+          pytest
 
   build:
     runs-on: self-hosted
@@ -57,15 +68,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13.9'
+      - name: Verify Python
+        run: |
+          python3 --version
+          which python3
+
+#      - name: Set up Python
+#        uses: actions/setup-python@v6
+#        with:
+#          python-version: '3.14.5'
 
       - name: Install Python dependencies
         run: |
           cd ${{ github.workspace }}
-          pip install -r requirements.txt
+           python3 -m venv venv
+          source venv/bin/activate
+          pip3 install -r requirements.txt
 
       - name: Create .env from secrets
         run: |
@@ -76,17 +94,30 @@ jobs:
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           FLASK_ENV=${{ secrets.FLASK_ENV }}
+          DB_HOST=${{secrets.DB_HOST}}
+          KRATOS_DB_URL=${{ secrets.KRATOS_DB_URL }}
+          HYDRA_DB_URL=${{ secrets.HYDRA_DB_URL }}
+          API_DOMAIN=${{ secrets.API_DOMAIN }}
+          HYDRA_SECRET=${{ secrets.HYDRA_SECRET }}
+          HYDRA_OIDC_SALT=${{ secrets.HYDRA_OIDC_SALT }}
+          KRATOS_SECRETS_DEFAULT=${{ secrets.KRATOS_SECRETS_DEFAULT }}
+          KRATOS_SECRETS_COOKIE=${{ secrets.KRATOS_SECRETS_COOKIE }}
+          KRATOS_SECRETS_CIPHER=${{ secrets.KRATOS_SECRETS_CIPHER }}
+          RESEND_TOKEN=${{secrets.RESEND_TOKEN}}
+          KRATOS_ADMIN_URL=${{secrets.KRATOS_ADMIN_URL}}
+          KRATOS_PUBLIC_URL=${{secrets.KRATOS_PUBLIC_URL}}
           EOF
 
       - name: Run migrations
         run: |
           cd ${{ github.workspace }}
-          export DATABASE_URL=${{ secrets.DATABASE_URL }}
+          source venv/bin/activate
+          export DATABASE_URL=${{ secrets.DATABASE_URL_ACTIONS }}
           alembic upgrade head
 
       - name: Rebuild and restart containers
         run: |
           cd ${{ github.workspace }}
-          docker-compose -f dev_db.docker-compose.yml down
-          docker-compose -f dev_db.docker-compose.yml up -d --build
+          docker compose -f dev_db.docker-compose.yml down
+          docker compose -f dev_db.docker-compose.yml up -d --build
           docker image prune -f

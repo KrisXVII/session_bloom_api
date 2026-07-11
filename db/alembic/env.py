@@ -11,7 +11,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-database_url = os.getenv('DATABASE_URL')
+env = os.getenv("FLASK_ENV")
+if env == "local":
+    database_url = os.getenv('LOCAL_DB_URL')
+else:
+    database_url = os.getenv("DATABASE_URL")
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

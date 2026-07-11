@@ -3,6 +3,7 @@ from app.serializers.base_serializer import BaseSerializer
 class UserSerializer(BaseSerializer):
 	def __init__(self, user):
 		self.id = str(user.id)
+		self.kratos_id = user.kratos_id
 		self.code = user.code
 		self.first_name = user.first_name
 		self.last_name = user.last_name

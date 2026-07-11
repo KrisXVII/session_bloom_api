@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from ..serializers.user_serializer import UserSerializer
 from params_schemas.user_schemas import *
-from app.models.user import User, UserStatus
+from app.models.user import User
 from app import ap
 from app.utils.custom_error import CustomError
 from marshmallow import ValidationError
@@ -14,13 +14,6 @@ user_bp = Blueprint("user", __name__)
 def get_users():
 	users = User.all()
 	return UserSerializer.render_list(users)
-
-@user_bp.route("/", methods=["POST"])
-def create_user():
-	params = _set_user_params(UserCreateSchema)
-	params["status"] = UserStatus.ACTIVE
-	user = User.create(**params)
-	return UserSerializer.render(user)
 
 @user_bp.route("/<user_id>", methods=["GET"])
 def get_user(user_id):

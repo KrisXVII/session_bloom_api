@@ -9,6 +9,8 @@ This file was created with ChangelogManager 0.0.1, do not modify it directly.
 
 ## [Unreleased]
 
+- Ory Hydra and Ory Kratos Auth system
+- Switched AWS infrastructure to Pi
 - AWS infrastructure
 - User CRUD
 - User status as PG DataType

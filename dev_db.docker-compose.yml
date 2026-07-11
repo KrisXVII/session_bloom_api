@@ -3,16 +3,112 @@ services:
 
   #redis: ...
 
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    ports:
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ~/certs:/certs:ro # readonly
+    networks:
+      - ory_network
+    restart: unless-stopped
+
+  hydra_ory:
+    image: oryd/hydra:v2.3.0
+    container_name: ory_hydra
+    ports:
+      - "127.0.0.1:4444:4444" # Public API
+      - "127.0.0.1:4445:4445" # Admin API
+    environment:
+        - DSN=${HYDRA_DB_URL}
+        - SECRETS_SYSTEM=${HYDRA_SECRET}
+
+        - URLS_SELF_ISSUER=https://${API_DOMAIN}:4444
+        - URLS_LOGIN=https://${API_DOMAIN}:5001/auth/login
+        - URLS_CONSENT=https://${API_DOMAIN}:5001/auth/consent
+        - URLS_ERROR=https://${API_DOMAIN}:5001/auth/error
+
+        - OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
+        - OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=${HYDRA_OIDC_SALT}
+        - OIDC_DYNAMIC_CLIENT_REGISTRATION_ENABLED=true
+    command: serve all  # Run both public and admin APIs
+    networks:
+      - ory_network
+    extra_hosts:
+      - db.sessionbloom.z:${DB_HOST}
+      - host.docker.internal:${DB_HOST}
+    depends_on:
+      - kratos_ory
+    restart: unless-stopped
+
+  kratos_ory:
+    image: oryd/kratos:v1.3.0
+    container_name: ory_kratos
+    ports:
+      - "127.0.0.1:4433:4433"   # Public API
+      - "127.0.0.1:4434:4434"   # Admin API
+    environment:
+
+      - DSN=${KRATOS_DB_URL}
+      - SECRETS_DEFAULT=${KRATOS_SECRETS_DEFAULT}
+      - SECRETS_COOKIE=${KRATOS_SECRETS_COOKIE}
+      - SECRETS_CIPHER=${KRATOS_SECRETS_CIPHER}
+
+      - SERVE_PUBLIC_BASE_URL=http://${API_DOMAIN}:4433
+      - SERVE_PUBLIC_CORS_ALLOWED_ORIGINS_0=http://${API_DOMAIN}:5001
+    # - SERVE_PUBLIC_CORS_ALLOWED_ORIGINS_1=http://${API_DOMAIN}:5001
+      - SERVE_ADMIN_BASE_URL=http://kratos:4434
+      - SELFSERVICE_DEFAULT_BROWSER_RETURN_URL=http://${API_DOMAIN}:5001
+      - SELFSERVICE_ALLOWED_RETURN_URLS_0=http://${API_DOMAIN}:5001
+      - SELFSERVICE_ALLOWED_RETURN_URLS_1=http://localhost:5001
+      - SELFSERVICE_FLOWS_ERROR_UI_URL=http://${API_DOMAIN}:5001/auth/error
+      - SELFSERVICE_FLOWS_SETTINGS_UI_URL=http://${API_DOMAIN}:5001/auth/settings
+      - SELFSERVICE_FLOWS_RECOVERY_UI_URL=http://${API_DOMAIN}:5001/auth/recovery
+      - SELFSERVICE_FLOWS_VERIFICATION_UI_URL=http://${API_DOMAIN}:5001/auth/verify
+      - SELFSERVICE_FLOWS_LOGOUT_AFTER_DEFAULT_BROWSER_RETURN_URL=http://${API_DOMAIN}:5001/auth/login
+      - SELFSERVICE_FLOWS_LOGIN_UI_URL=http://${API_DOMAIN}:5001/auth/login
+      - SELFSERVICE_FLOWS_REGISTRATION_UI_URL=http://${API_DOMAIN}:5001/auth/registration
+      - COURIER_SMTP_CONNECTION_URI=smtps://resend:${RESEND_TOKEN}@smtp.resend.com:465/
+
+      - KRATOS_ADMIN_URL=${KRATOS_ADMIN_URL}
+      - KRATOS_PUBLIC_URL=${KRATOS_PUBLIC_URL}
+
+
+      - LOG_LEVEL=debug
+    volumes:
+      # Mount configuration files
+      - ./kratos:/etc/config/kratos
+    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+    networks:
+      - ory_network
+    extra_hosts:
+      - db.sessionbloom.z:${DB_HOST}
+      - host.docker.internal:${DB_HOST}
+    restart: unless-stopped
+
   backend_dev:
 
     build: .
     container_name: dev_python_api
-    ports:
-      - "5001:5000" # In container 5000, from local machine 5001 as address
+#    ports: # Internal only because of Caddy
+#      - "5001:5000" # In container 5000, from local machine (Pi) 5001 as address
+#      - "127.0.0.1:5001:5000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - FLASK_APP=app:create_app
       - FLASK_ENV=${FLASK_ENV}
       - FLASK_RUN_HOST=0.0.0.0
       - FLASK_RUN_PORT=5000
+      - FLASK_DEBUG=1
+    networks:
+      - ory_network
+    extra_hosts:
+      - "db.sessionbloom.z:host-gateway"
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
+
+networks:
+  ory_network:
+    driver: bridge
