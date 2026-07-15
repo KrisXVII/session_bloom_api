@@ -1,0 +1,53 @@
+{
+  "id": "f0bf0c61-dc3f-496c-9eb8-7a1a05cf6e2a",
+  "type": "api",
+  "expires_at": "2026-07-09T10:40:29.003448885Z",
+  "issued_at": "2026-07-09T09:40:29.003448885Z",
+  "request_url": "http://kratos_ory:4433/self-service/verification/api",
+  "active": "code",
+  "ui": {
+    "action": "http://api.sessionbloom.z:4433/self-service/verification?flow=f0bf0c61-dc3f-496c-9eb8-7a1a05cf6e2a",
+    "method": "POST",
+    "nodes": [
+      {
+        "type": "input",
+        "group": "code",
+        "attributes": {
+          "name": "email",
+          "type": "email",
+          "required": true,
+          "disabled": false,
+          "node_type": "input"
+        },
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070007,
+            "text": "Email",
+            "type": "info"
+          }
+        }
+      },
+      {
+        "type": "input",
+        "group": "code",
+        "attributes": {
+          "name": "method",
+          "type": "submit",
+          "value": "code",
+          "disabled": false,
+          "node_type": "input"
+        },
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070009,
+            "text": "Continue",
+            "type": "info"
+          }
+        }
+      }
+    ]
+  },
+  "state": "choose_method"
+}
