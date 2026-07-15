@@ -70,6 +70,10 @@ def update_identity(user_id):
 	user.update(**params)
 	return UserSerializer.render(user)
 
+@registration_bp.route("/<user_id>", methods=["PUT"])
+def update_password(user_id):
+	return 0
+
 
 def _set_params(schema_class, partial=False):
 	data = request.get_json()
