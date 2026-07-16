@@ -22,9 +22,8 @@ class TestKratosAdminApi:
 
 		assert result["id"] is not None
 
-	@focus
 	@responses.activate
-	def test_sends_correct_patch(self, app):
+	def test_sends_correct_patch(self):
 		identity_id = str(fake.uuid4())
 		KratosStubs.patch_identity(identity_id=identity_id)
 
@@ -40,4 +39,3 @@ class TestKratosAdminApi:
 		assert {"op": "replace", "path": "/traits/first_name", "value": "Jack"} in sent
 		assert {"op": "replace", "path": "/traits/last_name", "value": "Sparrow"} in sent
 
-	
