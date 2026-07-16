@@ -6,7 +6,8 @@ from app import ap
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_DIR = os.path.join(BASE_DIR, "json_responses")
-KRATOS_BASE = Config.KRATOS_ADMIN_URL
+KRATOS_ADMIN_BASE = Config.KRATOS_ADMIN_URL
+KRATOS_PUBLIC_BASE = Config.KRATOS_PUBLIC_URL
 
 class KratosStubs:
 
@@ -18,10 +19,23 @@ class KratosStubs:
 
 		responses.add(
 			responses.POST,
-			f"{KRATOS_BASE}/admin/identities",
+			f"{KRATOS_ADMIN_BASE}/admin/identities",
 			json=response_json,
 			status=201
 		)
+
+	# @classmethod
+	# def get_identity(cls, identity_id):
+	#
+	# 	with open(os.path.join(JSON_DIR, "identity_fetched.json"), "r", encoding="utf-8") as f:
+	# 		identity_json = json.load(f)
+	#
+	# 	responses.add(
+	# 		responses.GET,
+	# 		f"{KRATOS_ADMIN_BASE}/admin/identities/{identity_id}",
+	# 		json=identity_json,
+	# 		status=200
+	# 	)
 
 	@classmethod
 	def patch_identity(cls, identity_id):
@@ -30,7 +44,7 @@ class KratosStubs:
 
 		responses.add(
 			responses.PATCH,
-			f"{KRATOS_BASE}/admin/identities/{identity_id}",
+			f"{KRATOS_ADMIN_BASE}/admin/identities/{identity_id}",
 			json=response_json,
 			status=200
 		)
@@ -42,7 +56,19 @@ class KratosStubs:
 
 		responses.add(
 			responses.PUT,
-			f"{KRATOS_BASE}/admin/identities/{identity_id}",
+			f"{KRATOS_ADMIN_BASE}/admin/identities/{identity_id}",
+			json=response_json,
+			status=200
+		)
+
+	@classmethod
+	def get_verification_flow(cls):
+		with open(os.path.join(JSON_DIR, "get_auth_flow.json"), "r", encoding="utf-8") as f:
+			response_json = json.load(f)
+
+		responses.add(
+			responses.GET,
+			f"{KRATOS_PUBLIC_BASE}/self-service/verification/api",
 			json=response_json,
 			status=200
 		)
