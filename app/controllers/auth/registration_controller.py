@@ -7,6 +7,7 @@ from marshmallow import ValidationError
 from app.models.user import User, UserStatus
 from app.utils.custom_error import CustomError
 from app.serializers.user_serializer import UserSerializer
+from app.serializers.kratos_serializers.FlowSerializer import FlowSerializer
 from flask import current_app
 
 registration_bp = Blueprint("registration", __name__)
@@ -39,7 +40,7 @@ def sign_up():
 
 @registration_bp.route("/auth_flow", methods=["GET"])
 def create_auth_flow():
-	return KratosPublicAPI.start_verification_flow()["id"]
+	return FlowSerializer.render(KratosPublicAPI.start_verification_flow())
 
 @registration_bp.route("/send_verification_code", methods=["POST"])
 def send_code():

@@ -54,3 +54,12 @@ class TestRegistrationController:
 			assert response.json['first_name'] == data["first_name"]
 			assert response.json['last_name'] == data["last_name"]
 			assert response.json['email'] == data["email"]
+
+	class TestAuthFlow:
+
+		@responses.activate
+		def test_create_auth_flow(self, client):
+			KratosStubs.get_verification_flow()
+			response = client.get("/auth/auth_flow")
+			assert response.status_code == 200
+			assert response.json["flow_id"] == "add86485-f2f8-46bb-b480-76bfe36380e3"
