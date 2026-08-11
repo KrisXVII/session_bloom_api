@@ -84,3 +84,7 @@ courier:
     connection_uri: # COURIER_SMTP_CONNECTION_URI
     from_address: onboarding@resend.dev
     from_name: SessionBloom
+
+session:
+  lifespan: 720h
+  earliest_possible_extend: 12h
