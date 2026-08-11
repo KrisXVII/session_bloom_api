@@ -1,0 +1,92 @@
+{
+  "active": "code",
+  "expires_at": "2026-07-16T09:35:44.083161Z",
+  "id": "add86485-f2f8-46bb-b480-76bfe36380e3",
+  "issued_at": "2026-07-16T08:35:44.083161Z",
+  "request_url": "http://kratos_ory:4433/self-service/verification/api",
+  "state": "sent_email",
+  "type": "api",
+  "ui": {
+    "action": "http://api.sessionbloom.z:4433/self-service/verification?flow=add86485-f2f8-46bb-b480-76bfe36380e3",
+    "messages": [
+      {
+        "id": 1080003,
+        "text": "An email containing a verification code has been sent to the email address you provided. If you have not received an email, check the spelling of the address and make sure to use the address you registered with.",
+        "type": "info"
+      }
+    ],
+    "method": "POST",
+    "nodes": [
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "method",
+          "node_type": "input",
+          "type": "hidden",
+          "value": "code"
+        },
+        "group": "code",
+        "messages": [],
+        "meta": {},
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "code",
+          "node_type": "input",
+          "required": true,
+          "type": "text"
+        },
+        "group": "code",
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070011,
+            "text": "Verification code",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "method",
+          "node_type": "input",
+          "type": "submit",
+          "value": "code"
+        },
+        "group": "code",
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070009,
+            "text": "Continue",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "email",
+          "node_type": "input",
+          "type": "submit",
+          "value": "test@gmail.com"
+        },
+        "group": "code",
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070008,
+            "text": "Resend code",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      }
+    ]
+  }
+}
