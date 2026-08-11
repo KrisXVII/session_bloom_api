@@ -1,0 +1,53 @@
+{
+  "id": "add86485-f2f8-46bb-b480-76bfe36380e3",
+  "type": "api",
+  "expires_at": "2026-07-16T09:35:44.083161988Z",
+  "issued_at": "2026-07-16T08:35:44.083161988Z",
+  "request_url": "http://kratos_ory:4433/self-service/verification/api",
+  "active": "code",
+  "ui": {
+    "action": "http://api.sessionbloom.z:4433/self-service/verification?flow=add86485-f2f8-46bb-b480-76bfe36380e3",
+    "method": "POST",
+    "nodes": [
+      {
+        "type": "input",
+        "group": "code",
+        "attributes": {
+          "name": "email",
+          "type": "email",
+          "required": true,
+          "disabled": false,
+          "node_type": "input"
+        },
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070007,
+            "text": "Email",
+            "type": "info"
+          }
+        }
+      },
+      {
+        "type": "input",
+        "group": "code",
+        "attributes": {
+          "name": "method",
+          "type": "submit",
+          "value": "code",
+          "disabled": false,
+          "node_type": "input"
+        },
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070009,
+            "text": "Continue",
+            "type": "info"
+          }
+        }
+      }
+    ]
+  },
+  "state": "choose_method"
+}

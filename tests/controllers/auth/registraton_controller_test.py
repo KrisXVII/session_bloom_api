@@ -1,9 +1,8 @@
-import uuid
 from faker import Faker
-
 from tests.factories.user_factory import UserFactory
 from tests.helpers import *
 from tests.schemas.user_schema import UserSchema
+from tests.schemas.kratos_schemas.FlowSchema import FlowSchema
 from tests.schemas.error_schemas import *
 from tests.conftest import focus
 import responses
@@ -54,3 +53,29 @@ class TestRegistrationController:
 			assert response.json['first_name'] == data["first_name"]
 			assert response.json['last_name'] == data["last_name"]
 			assert response.json['email'] == data["email"]
+
+	class TestAuthFlow:
+
+		@responses.activate
+		def test_create_auth_flow(self, client):
+			KratosStubs.get_verification_flow()
+			response = client.get("/auth/auth_flow")
+			assert_valid_schema(response.json, FlowSchema)
+			assert response.status_code == 200
+			assert response.json["flow_id"] == "add86485-f2f8-46bb-b480-76bfe36380e3"
+
+		@responses.activate
+		def test_send_code(self, client):
+			flow_id = str(fake.uuid4())
+			email = fake.email()
+			KratosStubs.send_verification_code(flow_id)
+
+			response = client.post(
+				"/auth/send_verification_code",
+				json={"flow_id": flow_id, "email": email},
+			)
+
+			assert response.status_code == 204
+			request = responses.calls[0].request
+			assert f"flow={flow_id}" in request.url
+			assert json.loads(request.body)["email"] == email

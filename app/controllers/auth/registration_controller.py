@@ -7,6 +7,7 @@ from marshmallow import ValidationError
 from app.models.user import User, UserStatus
 from app.utils.custom_error import CustomError
 from app.serializers.user_serializer import UserSerializer
+from app.serializers.kratos_serializers.FlowSerializer import FlowSerializer
 from flask import current_app
 
 registration_bp = Blueprint("registration", __name__)
@@ -39,23 +40,24 @@ def sign_up():
 
 @registration_bp.route("/auth_flow", methods=["GET"])
 def create_auth_flow():
-	return KratosPublicAPI.start_verification_flow()["id"]
+	return FlowSerializer.render(KratosPublicAPI.start_verification_flow())
 
 @registration_bp.route("/send_verification_code", methods=["POST"])
 def send_code():
 	params = request.get_json()
-	return KratosPublicAPI.send_verification_code(
-		params["flow_id"],
-		params["email"]
-	)
+	KratosPublicAPI.send_verification_code(
+		flow_id=params["flow_id"],
+		email=params["email"])
+	return FlowSerializer.no_content()
 
 @registration_bp.route("/validate_verification_code", methods=["POST"])
 def validate_code():
 	params = request.get_json()
-	return KratosPublicAPI.verify_code(
-		params["flow_id"],
-		params["code"],
+	KratosPublicAPI.verify_code(
+		flow_id=params["flow_id"],
+		code=params["code"],
 	)
+	return FlowSerializer.no_content()
 
 @registration_bp.route("/<user_id>", methods=["PATCH"])
 def update_identity(user_id):
@@ -69,6 +71,10 @@ def update_identity(user_id):
 	KratosAdminAPI.update_identity(kratos_id, params)
 	user.update(**params)
 	return UserSerializer.render(user)
+
+@registration_bp.route("/<user_id>", methods=["PUT"])
+def update_password(user_id):
+	return 0
 
 
 def _set_params(schema_class, partial=False):
