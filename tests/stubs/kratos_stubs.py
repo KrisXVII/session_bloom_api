@@ -72,3 +72,15 @@ class KratosStubs:
 			json=response_json,
 			status=200
 		)
+
+	@classmethod
+	def send_verification_code(cls, flow_id):
+		with open(os.path.join(JSON_DIR, "verification_email_sent.json"), "r", encoding="utf-8") as f:
+			response_json = json.load(f)
+
+		responses.add(
+			responses.POST,
+			f"{KRATOS_PUBLIC_BASE}/self-service/verification?flow={flow_id}",
+			json=response_json,
+			status=200
+		)

@@ -45,18 +45,19 @@ def create_auth_flow():
 @registration_bp.route("/send_verification_code", methods=["POST"])
 def send_code():
 	params = request.get_json()
-	return KratosPublicAPI.send_verification_code(
-		params["flow_id"],
-		params["email"]
-	)
+	KratosPublicAPI.send_verification_code(
+		flow_id=params["flow_id"],
+		email=params["email"])
+	return FlowSerializer.no_content()
 
 @registration_bp.route("/validate_verification_code", methods=["POST"])
 def validate_code():
 	params = request.get_json()
-	return KratosPublicAPI.verify_code(
-		params["flow_id"],
-		params["code"],
+	KratosPublicAPI.verify_code(
+		flow_id=params["flow_id"],
+		code=params["code"],
 	)
+	return FlowSerializer.no_content()
 
 @registration_bp.route("/<user_id>", methods=["PATCH"])
 def update_identity(user_id):
