@@ -88,3 +88,7 @@ courier:
 session:
   lifespan: 720h
   earliest_possible_extend: 12h
+
+security:
+    account_enumeration:
+      mitigate: true
