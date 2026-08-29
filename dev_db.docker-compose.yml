@@ -15,33 +15,33 @@ services:
       - ory_network
     restart: unless-stopped
 
-  hydra_ory:
-    image: oryd/hydra:v2.3.0
-    container_name: ory_hydra
-    ports:
-      - "127.0.0.1:4444:4444" # Public API
-      - "127.0.0.1:4445:4445" # Admin API
-    environment:
-        - DSN=${HYDRA_DB_URL}
-        - SECRETS_SYSTEM=${HYDRA_SECRET}
-
-        - URLS_SELF_ISSUER=https://${API_DOMAIN}:4444
-        - URLS_LOGIN=https://${API_DOMAIN}:5001/auth/login
-        - URLS_CONSENT=https://${API_DOMAIN}:5001/auth/consent
-        - URLS_ERROR=https://${API_DOMAIN}:5001/auth/error
-
-        - OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
-        - OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=${HYDRA_OIDC_SALT}
-        - OIDC_DYNAMIC_CLIENT_REGISTRATION_ENABLED=true
-    command: serve all  # Run both public and admin APIs
-    networks:
-      - ory_network
-    extra_hosts:
-      - db.sessionbloom.z:${DB_HOST}
-      - host.docker.internal:${DB_HOST}
-    depends_on:
-      - kratos_ory
-    restart: unless-stopped
+#  hydra_ory:
+#    image: oryd/hydra:v2.3.0
+#    container_name: ory_hydra
+#    ports:
+#      - "127.0.0.1:4444:4444" # Public API
+#      - "127.0.0.1:4445:4445" # Admin API
+#    environment:
+#        - DSN=${HYDRA_DB_URL}
+#        - SECRETS_SYSTEM=${HYDRA_SECRET}
+#
+#        - URLS_SELF_ISSUER=https://${API_DOMAIN}:4444
+#        - URLS_LOGIN=https://${API_DOMAIN}:5001/auth/login
+#        - URLS_CONSENT=https://${API_DOMAIN}:5001/auth/consent
+#        - URLS_ERROR=https://${API_DOMAIN}:5001/auth/error
+#
+#        - OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
+#        - OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=${HYDRA_OIDC_SALT}
+#        - OIDC_DYNAMIC_CLIENT_REGISTRATION_ENABLED=true
+#    command: serve all  # Run both public and admin APIs
+#    networks:
+#      - ory_network
+#    extra_hosts:
+#      - db.sessionbloom.z:${DB_HOST}
+#      - host.docker.internal:${DB_HOST}
+#    depends_on:
+#      - kratos_ory
+#    restart: unless-stopped
 
   kratos_ory:
     image: oryd/kratos:v1.3.0
@@ -75,6 +75,8 @@ services:
       - KRATOS_ADMIN_URL=${KRATOS_ADMIN_URL}
       - KRATOS_PUBLIC_URL=${KRATOS_PUBLIC_URL}
 
+      - POSTHOG_ENDPOINT=${POSTHOG_ENDPOINT
+      - POSTHOG_API_KEY=${POSTHOG_API_KEY}
 
       - LOG_LEVEL=debug
     volumes:

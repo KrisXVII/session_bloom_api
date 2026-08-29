@@ -5,6 +5,7 @@ from rich.console import Console
 from rich.pretty import Pretty
 from app.utils.custom_error import CustomError
 from flasgger import Swagger
+from lib.interfaces.posthog_interface import posthog
 
 console = Console()
 
@@ -45,6 +46,18 @@ def create_app(config_name=None):
 	@app.errorhandler(CustomError)
 	def handle_custom_error(e):
 		return e.to_dict(), e.code
+
+	@app.errorhandler(Exception)
+	def error_to_posthog(e):
+		app.logger.exception(e)
+
+		if app.config["POSTHOG_ENABLED"]:
+			try:
+				posthog.capture_exception(e)
+			except Exception:
+				app.logger.exception("Failed to forward exception to PostHog")
+
+		return CustomError("Internal server error", 500, None).to_dict(), 500
 
 	@app.route('/')
 	def hello_world():
