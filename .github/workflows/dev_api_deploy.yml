@@ -106,6 +106,8 @@ jobs:
           RESEND_TOKEN=${{secrets.RESEND_TOKEN}}
           KRATOS_ADMIN_URL=${{secrets.KRATOS_ADMIN_URL}}
           KRATOS_PUBLIC_URL=${{secrets.KRATOS_PUBLIC_URL}}
+          POSTHOG_API_KEY=${{POSTHOG_API_KEY}}
+          POSTHOG_ENDPOINT=${{POSTHOG_ENDPOINT}}
           EOF
 
       - name: Run migrations
