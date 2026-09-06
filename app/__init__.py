@@ -6,6 +6,7 @@ from rich.pretty import Pretty
 from app.utils.custom_error import CustomError
 from flasgger import Swagger
 from lib.interfaces.posthog_interface import posthog
+from lib.interfaces.beacon_api import BeaconApi
 
 console = Console()
 
@@ -56,6 +57,11 @@ def create_app(config_name=None):
 				posthog.capture_exception(e)
 			except Exception:
 				app.logger.exception("Failed to forward exception to PostHog")
+			try:
+				ap(e)
+				BeaconApi.send_event(e)
+			except Exception:
+				app.logger.exception("Failed to forward exception to Beacon")
 
 		return CustomError("Internal server error", 500, None).to_dict(), 500
 
