@@ -10,7 +10,7 @@ class BeaconApi:
     @classmethod
     def send_event(cls, event):
 
-        response = BEACON_LOCAL.post(
+        BEACON_LOCAL.post(
             "/api/echoEvent",
             expected=(200,),
             json={"event": event},

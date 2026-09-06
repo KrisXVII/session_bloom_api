@@ -1,5 +1,5 @@
-import os, yaml
-from flask import Flask
+import os, yaml, traceback
+from flask import Flask, request
 from db.base import db
 from rich.console import Console
 from rich.pretty import Pretty
@@ -58,7 +58,25 @@ def create_app(config_name=None):
 			except Exception:
 				app.logger.exception("Failed to forward exception to PostHog")
 			try:
-				ap(e)
+				import traceback
+
+				app.logger.info("type      %s", type(e).__name__)
+				app.logger.info("str       %r", str(e))
+				app.logger.info("repr      %r", repr(e))
+				app.logger.info("args      %r", e.args)
+				app.logger.info("attrs     %r", [a for a in dir(e) if not a.startswith("_")])
+				app.logger.info("dict      %r", getattr(e, "__dict__", None))
+				app.logger.info("cause     %r", e.__cause__)
+				app.logger.info("context   %r", e.__context__)
+				app.logger.info("frames    %r", traceback.extract_tb(e.__traceback__))
+				app.logger.info("request   %r", {
+					"path": request.path,
+					"method": request.method,
+					"endpoint": request.endpoint,
+					"url": request.url,
+					"remote_addr": request.remote_addr,
+					"args": dict(request.args),
+				})
 				BeaconApi.send_event(e)
 			except Exception:
 				app.logger.exception("Failed to forward exception to Beacon")
@@ -67,6 +85,7 @@ def create_app(config_name=None):
 
 	@app.route('/')
 	def hello_world():
+		div = 1/0
 		return 'Hello World!'
 
 	@app.route('/test')
