@@ -38,13 +38,3 @@ class BeaconApi:
         }
 
         return payload
-
-    # service            "session_bloom_api"
-    # environment        "development"
-    # error_type         "ZeroDivisionError"
-    # message            "division by zero"
-    # route              "/"
-    # method             "GET"
-    # frames             [{file, line, func}, ...]
-    # occurred_at        "2026-09-06T13:45:05Z"
-    # posthog_event_id   "0b654f03-..."
