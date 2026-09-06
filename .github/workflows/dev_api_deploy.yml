@@ -40,6 +40,7 @@ jobs:
           KRATOS_PUBLIC_URL: ${{secrets.KRATOS_PUBLIC_URL}}
           POSTHOG_API_KEY: "ci-not-used"
           POSTHOG_ENDPOINT: "https://posthog.com"
+          BEACON_ENDPOINT: "https://beacon.com"
         run: |
           source venv/bin/activate
           pytest
@@ -110,6 +111,7 @@ jobs:
           KRATOS_PUBLIC_URL=${{secrets.KRATOS_PUBLIC_URL}}
           POSTHOG_API_KEY=${{secrets.POSTHOG_API_KEY}}
           POSTHOG_ENDPOINT=${{secrets.POSTHOG_ENDPOINT}}
+          BEACON_ENDPOINT=${{secrets.BEACON_ENDPOINT}}
           EOF
 
       - name: Run migrations

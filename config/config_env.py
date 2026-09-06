@@ -11,6 +11,7 @@ class Config:
 	KRATOS_PUBLIC_URL = os.environ['KRATOS_PUBLIC_URL']
 	POSTHOG_ENDPOINT = os.environ['POSTHOG_ENDPOINT']
 	POSTHOG_API_KEY = os.environ['POSTHOG_API_KEY']
+	BEACON_LOCAL = os.environ["BEACON_ENDPOINT"]
 
 class DevelopmentConfig(Config):
 	"""Development configuration"""

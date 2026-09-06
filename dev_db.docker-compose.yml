@@ -102,6 +102,7 @@ services:
       - POSTHOG_API_KEY=${POSTHOG_API_KEY}
       - KRATOS_ADMIN_URL=${KRATOS_ADMIN_URL}
       - KRATOS_PUBLIC_URL=${KRATOS_PUBLIC_URL}
+      - BEACON_ENDPOINT=${BEACON_ENDPOINT}
     networks:
       - ory_network
     extra_hosts:
