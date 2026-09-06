@@ -25,6 +25,7 @@ class BeaconApi:
     @staticmethod
     def _build_event_payload(event, request, posthog_event_id):
         payload = {
+            "service": "session_bloom_api",
             "error_type": type(event).__name__,
             "method": request.method,
             "route": str(request.url_rule),
