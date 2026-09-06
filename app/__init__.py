@@ -1,4 +1,4 @@
-import os, yaml, traceback
+import os, yaml
 from flask import Flask, request
 from db.base import db
 from rich.console import Console
@@ -54,32 +54,10 @@ def create_app(config_name=None):
 
 		if app.config["POSTHOG_ENABLED"]:
 			try:
-				posthog.capture_exception(e)
-			except Exception:
-				app.logger.exception("Failed to forward exception to PostHog")
-			try:
-				import traceback
-
-				app.logger.info("type      %s", type(e).__name__)
-				app.logger.info("str       %r", str(e))
-				app.logger.info("repr      %r", repr(e))
-				app.logger.info("args      %r", e.args)
-				app.logger.info("attrs     %r", [a for a in dir(e) if not a.startswith("_")])
-				app.logger.info("dict      %r", getattr(e, "__dict__", None))
-				app.logger.info("cause     %r", e.__cause__)
-				app.logger.info("context   %r", e.__context__)
-				app.logger.info("frames    %r", traceback.extract_tb(e.__traceback__))
-				app.logger.info("request   %r", {
-					"path": request.path,
-					"method": request.method,
-					"endpoint": request.endpoint,
-					"url": request.url,
-					"remote_addr": request.remote_addr,
-					"args": dict(request.args),
-				})
-				BeaconApi.send_event(e)
-			except Exception:
-				app.logger.exception("Failed to forward exception to Beacon")
+				posthog_event_id = posthog.capture_exception(e)
+				BeaconApi.send_event(e, request, posthog_event_id)
+			except Exception as exception:
+				app.logger.exception("Failed to forward exception to PostHog or Beacon", exception.__dict__)
 
 		return CustomError("Internal server error", 500, None).to_dict(), 500
 
