@@ -16,7 +16,7 @@ class BeaconApi:
         payload = cls._build_event_payload(event, request, posthog_event_id)
 
         BEACON_LOCAL.post(
-            "/api/echoEvent",
+            "/api/events",
             expected=(200,),
             json=payload,
             error_message="Failed to reach Beacon"
