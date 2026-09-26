@@ -12,6 +12,19 @@ class Config:
 	POSTHOG_ENDPOINT = os.environ['POSTHOG_ENDPOINT']
 	POSTHOG_API_KEY = os.environ['POSTHOG_API_KEY']
 	BEACON_LOCAL = os.environ["BEACON_ENDPOINT"]
+	DEFAULT_CODE_VARIABLES_MASK_PATTERNS = [
+		r"(?i).*password.*",
+		r"(?i).*secret.*",
+		r"(?i).*passwd.*",
+		r"(?i).*pwd.*",
+		r"(?i).*api_key.*",
+		r"(?i).*apikey.*",
+		r"(?i).*auth.*",
+		r"(?i).*credentials.*",
+		r"(?i).*privatekey.*",
+		r"(?i).*private_key.*",
+		r"(?i).*token.*",
+	]
 
 class DevelopmentConfig(Config):
 	"""Development configuration"""
