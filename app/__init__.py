@@ -54,16 +54,17 @@ def create_app(config_name=None):
 
 		if app.config["POSTHOG_ENABLED"]:
 			try:
-				posthog_event_id = posthog.capture_exception(e)
-				BeaconApi.send_event(e, request, posthog_event_id)
+				posthog.capture_exception(e)
+				# posthog_event_id = posthog.capture_exception(e)
+				# BeaconApi.send_event(e, request, posthog_event_id)
 			except Exception as exception:
-				app.logger.exception("Failed to forward exception to PostHog or Beacon", exception.__dict__)
+				# app.logger.exception("Failed to forward exception to PostHog or Beacon", exception.__dict__)
+				app.logger.exception("Failed to forward exception to PostHog", exception.__dict__)
 
 		return CustomError("Internal server error", 500, None).to_dict(), 500
 
 	@app.route('/')
 	def hello_world():
-		div = 1/0
 		return 'Hello World!'
 
 	@app.route('/test')
