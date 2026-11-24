@@ -1,10 +1,12 @@
 import os, yaml
-from flask import Flask
+from flask import Flask, request
 from db.base import db
 from rich.console import Console
 from rich.pretty import Pretty
 from app.utils.custom_error import CustomError
 from flasgger import Swagger
+from lib.interfaces.posthog_interface import posthog
+from lib.interfaces.beacon_api import BeaconApi
 
 console = Console()
 
@@ -47,6 +49,21 @@ def create_app(config_name=None):
 	@app.errorhandler(CustomError)
 	def handle_custom_error(e):
 		return e.to_dict(), e.code
+
+	@app.errorhandler(Exception)
+	def error_to_posthog(e):
+		app.logger.exception(e)
+
+		if app.config["POSTHOG_ENABLED"]:
+			try:
+				posthog.capture_exception(e)
+				# posthog_event_id = posthog.capture_exception(e)
+				# BeaconApi.send_event(e, request, posthog_event_id)
+			except Exception as exception:
+				# app.logger.exception("Failed to forward exception to PostHog or Beacon", exception.__dict__)
+				app.logger.exception("Failed to forward exception to PostHog", exception.__dict__)
+
+		return CustomError("Internal server error", 500, None).to_dict(), 500
 
 	@app.route('/')
 	def hello_world():

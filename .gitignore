@@ -80,3 +80,5 @@ local_db.docker-compose.yml
 
 *.pem
 *-key.pem
+.claude
+ARCHITECTURE.md
