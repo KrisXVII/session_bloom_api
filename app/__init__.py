@@ -39,10 +39,12 @@ def create_app(config_name=None):
 	from app.controllers.user_controller import user_bp
 	from app.controllers.session_controller import session_bp
 	from app.controllers.auth.registration_controller import registration_bp
+	from app.controllers.auth.login_controller import login_bp
 
 	app.register_blueprint(user_bp, url_prefix='/users')
 	app.register_blueprint(session_bp, url_prefix='/sessions')
 	app.register_blueprint(registration_bp, url_prefix='/auth')
+	app.register_blueprint(login_bp, url_prefix='/auth')
 
 	@app.errorhandler(CustomError)
 	def handle_custom_error(e):

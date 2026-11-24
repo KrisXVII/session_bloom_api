@@ -3,19 +3,18 @@ from app import ap
 from params_schemas.auth_schemas.signup_schemas import *
 from lib.interfaces.kratos_admin_api import KratosAdminAPI
 from lib.interfaces.kratos_public_api import KratosPublicAPI
-from marshmallow import ValidationError
 from app.models.user import User, UserStatus
 from app.utils.custom_error import CustomError
 from app.serializers.user_serializer import UserSerializer
-from app.serializers.kratos_serializers.FlowSerializer import FlowSerializer
-from flask import current_app
+from app.serializers.kratos_serializers.flow_serializer import FlowSerializer
+from lib import set_params
 
 registration_bp = Blueprint("registration", __name__)
 
 @registration_bp.route("/sign_up", methods=["POST"])
 def sign_up():
 
-	params = _set_params(IdentitySchema)
+	params = set_params(IdentitySchema)
 	password = params.pop("password")
 	existing = User.find_by(email=params["email"])
 
@@ -66,7 +65,7 @@ def update_identity(user_id):
 	if not user:
 		raise CustomError("Not found", 404, f"User with ID {user_id} doesn't exist.")
 	kratos_id = user.kratos_id
-	params = _set_params(IdentitySchema, partial=True)
+	params = set_params(IdentitySchema, partial=True)
 	params.pop("password", None) # defense in depth on altered payloads, unknown = EXCLUDE is first layer
 	KratosAdminAPI.update_identity(kratos_id, params)
 	user.update(**params)
@@ -76,13 +75,3 @@ def update_identity(user_id):
 def update_password(user_id):
 	return 0
 
-
-def _set_params(schema_class, partial=False):
-	data = request.get_json()
-	current_app.logger.info(data)
-	if not data:
-		raise CustomError("Bad request", 400, "No data provided")
-	try:
-		return schema_class(partial=partial).load(data)
-	except ValidationError as err:
-		raise CustomError("Validation error", 400, err.messages)
